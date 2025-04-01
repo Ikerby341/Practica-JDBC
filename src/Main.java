@@ -1,5 +1,7 @@
+import dao.DBConnection;
 import view.Vista;
 
+import java.sql.Connection;
 import java.util.Scanner;
 
 public class Main {
@@ -8,6 +10,13 @@ public class Main {
     private static boolean cont = true;
 
     public static void main(String[] args) {
+
+        Connection conexio =  DBConnection.connectar();
+        if (conexio == null) {
+            Vista.mostrarMissatge("[Error] La base de dades no existeix o no s'ha trobat!");
+            return;
+        }
+
         while(cont) {
             mostrarMenuPrincipal();
             try {
