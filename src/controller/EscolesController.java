@@ -3,6 +3,15 @@ package controller;
 import view.Vista;
 
 public class EscolesController {
+    String nom;
+    String lloc;
+    String aproximacio;
+    int num_vies;
+    TipusPopularitat popularitat;
+    String restriccions;
+
+
+
     public static void mostrarSubmenuEscoles() {
         Vista.mostrartTitol("GESTIÓ ESCOLES");
         Vista.mostrarMissatge("1) Crear escola");
@@ -14,5 +23,10 @@ public class EscolesController {
         Vista.mostrarMissatge("Selecciona una opció (0-5): ");
     }
 
+    private enum TipusPopularitat {
+        BAIXA,
+        MITJANA,
+        ALTA
+    }
 
 }
