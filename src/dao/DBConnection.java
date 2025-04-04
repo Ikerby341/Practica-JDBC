@@ -8,7 +8,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DBConnection {
-    private static String rutaDB = "BBDD_Escalada.db";
+    private static final String rutaDB = "BBDD_Escalada.db";
 
     /**
      * Connectar amb una BD indicada en el paràmetre 'url'.
