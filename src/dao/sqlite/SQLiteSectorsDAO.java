@@ -1,7 +1,11 @@
 package dao.sqlite;
 
+import dao.DBConnection;
 import dao.interfaces.DAO;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
 public class SQLiteSectorsDAO implements DAO {
@@ -11,22 +15,29 @@ public class SQLiteSectorsDAO implements DAO {
     }
 
     @Override
-    public Object llistarID(Object id) {
-        return null;
-    }
-
-    @Override
-    public List llistarTot() {
-        return List.of();
-    }
-
-    @Override
-    public void actualitzar(Object o) {
+    public void actualitzar(String id, String quequiero, String comoquiero) {
 
     }
 
     @Override
-    public boolean esborrar(Object id) {
-        return false;
+    public void llistarID(String id) {
+
     }
+
+    @Override
+    public void llistarTot() {
+        Connection con = DBConnection.getConnexio();
+        try (Statement stmt = con.createStatement()) {
+            stmt.executeQuery("SELECT * FROM sectors");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        DBConnection.desconectar(con);
+    }
+
+    @Override
+    public void esborrar(String id) {
+
+    }
+
 }

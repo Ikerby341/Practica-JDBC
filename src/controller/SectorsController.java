@@ -3,12 +3,21 @@ package controller;
 import view.Vista;
 
 public class SectorsController {
-    private String nom;
-    private String latitud;
-    private long longitud;
-    private String aproximacio;
-    private int numVies;
-    private TipusPopularitat popularitat;
+    private final String nom;
+    private final String latitud;
+    private final long longitud;
+    private final String aproximacio;
+    private final int numVies;
+    private final TipusPopularitat popularitat;
+
+    public SectorsController(String nom, String latitud, long longitud, String aproximacio, int numVies, TipusPopularitat popularitat) {
+        this.nom = nom;
+        this.latitud = latitud;
+        this.longitud = longitud;
+        this.aproximacio = aproximacio;
+        this.numVies = numVies;
+        this.popularitat = popularitat;
+    }
 
     public static void mostrarSubmenuSectors() {
         Vista.mostrartTitol("GESTIÓ SECTORS");
@@ -25,5 +34,29 @@ public class SectorsController {
         BAIXA,
         MITJANA,
         ALTA
+    }
+
+    public String getNom() {
+        return nom;
+    }
+
+    public String getLatitud() {
+        return latitud;
+    }
+
+    public long getLongitud() {
+        return longitud;
+    }
+
+    public String getAproximacio() {
+        return aproximacio;
+    }
+
+    public int getNumVies() {
+        return numVies;
+    }
+
+    public TipusPopularitat getPopularitat() {
+        return popularitat;
     }
 }

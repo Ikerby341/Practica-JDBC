@@ -41,4 +41,8 @@ public class DBConnection {
             Vista.mostrarMissatge(e.getMessage());
         }
     }
+
+    public static Connection getConnexio() {
+        return connectar();
+    }
 }

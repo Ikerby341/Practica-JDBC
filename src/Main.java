@@ -76,7 +76,7 @@ public class Main {
     private static void switchEscola() {
         switch (opcio) {
             case 1:
-
+                EscolesController.crearEscola();
                 break;
             case 2:
 
