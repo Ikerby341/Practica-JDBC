@@ -1,5 +1,5 @@
 package dao.sqlite;
-import controller.EscaladorsController;
+import model.*;
 import dao.DBConnection;
 import dao.interfaces.DAO;
 import java.sql.Connection;
@@ -7,63 +7,50 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class SQLiteEscaladorsDAO implements DAO {
-    @Override
-    public void crear(Object o) {
-        if (o instanceof EscaladorsController) {
-            Connection con = DBConnection.getConnexio();
+
+    public static void crear(Connection con,Object o) {
+        if (o instanceof Escaladors) {
             try (Statement stmt = con.createStatement()) {
-                stmt.executeQuery("INSERT INTO escoles VALUES(" + ((EscaladorsController) o).getNom()
-                        + "," + ((EscolesController) o).getLloc() + ","
-                        + ((EscolesController) o).getAproximacio() + "," + ((EscolesController) o).getVies() + ","
-                        + ((EscolesController) o).getPopularitat() + "," + ((EscolesController) o).getRestriccions() +")");
+                stmt.executeQuery("INSERT INTO escoles (nom,alies,edat,nivell,via_id,estil_preferit,historial,fita) VALUES(" + ((Escaladors) o).getNom() + "," + ((Escaladors) o).getAlies() + "," + ((Escaladors) o).getEdat() + "," + ((Escaladors) o).getNivell() + "," + ((Escaladors) o).getId_via() + "," + ((Escaladors) o).getEstil_pref() + "," + ((Escaladors) o).getHistorial() + "," + ((Escaladors) o).getFita() + ")");
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
-            DBConnection.desconectar(con);
         }
     }
 
-    @Override
-    public void actualitzar(String id, String quequiero, String comoquiero) {
-        Connection con = DBConnection.getConnexio();
+
+    public static void actualitzar(Connection con,String id, String quequiero, String comoquiero) {
         try (Statement stmt = con.createStatement()) {
             stmt.executeQuery("UPDATE escaladors SET " + quequiero + " = " + comoquiero + " WHERE escalador_id = " + id);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        DBConnection.desconectar(con);
     }
 
-    @Override
-    public void llistarID(String id) {
-        Connection con = DBConnection.getConnexio();
+
+    public static void llistarID(Connection con,String id) {
         try (Statement stmt = con.createStatement()) {
             stmt.executeQuery("SELECT * FROM escaladors WHERE escalador_id = " + id);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        DBConnection.desconectar(con);
     }
 
-    @Override
-    public void llistarTot() {
-        Connection con = DBConnection.getConnexio();
+
+    public static void llistarTot(Connection con) {
         try (Statement stmt = con.createStatement()) {
             stmt.executeQuery("SELECT * FROM escaladors");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        DBConnection.desconectar(con);
     }
 
-    @Override
-    public void esborrar(String id) {
-        Connection con = DBConnection.getConnexio();
+
+    public static void esborrar(Connection con,String id) {
         try (Statement stmt = con.createStatement()) {
             stmt.executeQuery("DELETE FROM escaladors WHERE escalador_id = " + id);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        DBConnection.desconectar(con);
     }
 }

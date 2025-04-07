@@ -1,7 +1,8 @@
 import controller.*;
 import dao.DBConnection;
+import dao.sqlite.SQLiteEscolesDAO;
 import view.Vista;
-
+import model.*;
 import java.sql.Connection;
 import java.util.Scanner;
 
@@ -11,15 +12,15 @@ public class Main {
     private static boolean cont = true;
 
     public static void main(String[] args) {
-
         Connection conexio =  DBConnection.connectar();
+
         if (conexio == null) {
             Vista.mostrarMissatge("[Error] La base de dades no existeix o no s'ha trobat!");
             return;
         }
 
         while(cont) {
-            mostrarMenuPrincipal();
+            Vista.mostrarMenuPrincipal();
             try {
                 scanOpcio(4);
                 switchPrincipal();
@@ -51,19 +52,20 @@ public class Main {
     private static void switchPrincipal() {
         switch (opcio) {
             case 1:
-                EscolesController.mostrarSubmenuEscoles();
+                Vista.mostrarSubmenuEscoles();
                 scanOpcio(5);
+                switchEscola();
                 break;
             case 2:
-                SectorsController.mostrarSubmenuSectors();
+                Vista.mostrarSubmenuSectors();
                 scanOpcio(5);
                 break;
             case 3:
-                ViesController.mostrarSubmenuVies();
+                Vista.mostrarSubmenuVies();
                 scanOpcio(5);
                 break;
             case 4:
-                EscaladorsController.mostrarSubmenuEscaladors();
+                Vista.mostrarSubmenuEscaladors();
                 scanOpcio(5);
                 break;
             default:
@@ -73,34 +75,49 @@ public class Main {
         }
     }
 
+
+    /* SubMenu Gestio Escola */
+
     private static void switchEscola() {
+        Connection conexio = DBConnection.getConnexio();
         switch (opcio) {
             case 1:
-                EscolesController.crearEscola();
+                Escoles escola = EscolesController.crearEscola();
+                SQLiteEscolesDAO.crear(conexio,escola);
+                Vista.mostrarMissatge("Pulsa enter per continuar...");
+                scan.nextLine();
                 break;
             case 2:
-
+                Vista.mostrarMissatge("Digues el nom de la escola que vols actualitzar");
+                String id = scan.nextLine();
+                Vista.mostrarMissatge("Digues el que vols canviar (nom,lloc,num_vies...)");
+                String quequiero = scan.nextLine();
+                Vista.mostrarMissatge("Digues el que vols posar");
+                String comoquiero = scan.nextLine();
+                SQLiteEscolesDAO.actualitzar(conexio,id,quequiero,comoquiero);
+                Vista.mostrarMissatge("Pulsa enter per continuar...");
+                scan.nextLine();
                 break;
             case 3:
-
+                Vista.mostrarMissatge("Digues el nom de la escola que vols cercar");
+                String nom = scan.nextLine();
+                Vista.mostrarMissatge(SQLiteEscolesDAO.llistarID(conexio,nom));
+                Vista.mostrarMissatge("Pulsa enter per continuar...");
+                scan.nextLine();
                 break;
             case 4:
-
+                Vista.mostrarMissatge(SQLiteEscolesDAO.llistarTot(conexio));
+                Vista.mostrarMissatge("Pulsa enter per continuar...");
+                scan.nextLine();
+                break;
+            case 5:
+                Vista.mostrarMissatge("Digues el nom de la escola que vols eliminar");
+                String nomE = scan.nextLine();
+                SQLiteEscolesDAO.esborrar(conexio,nomE);Vista.mostrarMissatge("Pulsa enter per continuar...");
+                scan.nextLine();
                 break;
             default:
                 break;
         }
     }
-
-    private static void mostrarMenuPrincipal() {
-        Vista.mostrartTitol("INICI");
-        Vista.mostrarMissatge("1) Gestionar escoles");
-        Vista.mostrarMissatge("2) Gestionar sectors");
-        Vista.mostrarMissatge("3) Gestionar vies");
-        Vista.mostrarMissatge("4) Gestionar escaladors");
-        Vista.mostrarMissatge("0) Finalitzar");
-        Vista.mostrarMissatge("Selecciona una opció (0-4): ");
-    }
-
-
 }

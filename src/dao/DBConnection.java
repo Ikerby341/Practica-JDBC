@@ -9,13 +9,14 @@ import java.sql.SQLException;
 
 public class DBConnection {
     private static final String rutaDB = "BBDD_Escalada.db";
+    private static Connection connexio;
 
     /**
      * Connectar amb una BD indicada en el paràmetre 'url'.
      * @return Connexió amb la BD o 'null' si no s'ha pogut connectar
      */
     public static Connection connectar() {
-        Connection connexio = null;
+        connexio = null;
         File dbFile = new File(rutaDB);
 
         if (dbFile.exists()) {
@@ -43,6 +44,6 @@ public class DBConnection {
     }
 
     public static Connection getConnexio() {
-        return connectar();
+        return connexio;
     }
 }
