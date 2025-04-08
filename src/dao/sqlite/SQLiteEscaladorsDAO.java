@@ -2,55 +2,93 @@ package dao.sqlite;
 import model.*;
 import dao.DBConnection;
 import dao.interfaces.DAO;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
+import view.Vista;
+
+import java.sql.*;
 
 public class SQLiteEscaladorsDAO implements DAO {
 
     public static void crear(Connection con,Object o) {
         if (o instanceof Escaladors) {
-            try (Statement stmt = con.createStatement()) {
-                stmt.executeQuery("INSERT INTO escoles (nom,alies,edat,nivell,via_id,estil_preferit,historial,fita) VALUES(" + ((Escaladors) o).getNom() + "," + ((Escaladors) o).getAlies() + "," + ((Escaladors) o).getEdat() + "," + ((Escaladors) o).getNivell() + "," + ((Escaladors) o).getId_via() + "," + ((Escaladors) o).getEstil_pref() + "," + ((Escaladors) o).getHistorial() + "," + ((Escaladors) o).getFita() + ")");
+            String sql = "INSERT INTO escoles (nom, alies, edat, nivell, via_id, estil_preferit, historial, fita) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            try (PreparedStatement pstmt = con.prepareStatement(sql)) {
+                pstmt.setString(1, ((Escaladors) o).getNom());
+                pstmt.setString(2, ((Escaladors) o).getAlies());
+                pstmt.setInt(3, ((Escaladors) o).getEdat());
+                pstmt.setString(4, ((Escaladors) o).getNivell());
+                pstmt.setInt(5, ((Escaladors) o).getId_via());
+                pstmt.setString(6, ((Escaladors) o).getEstil_pref());
+                pstmt.setString(7, ((Escaladors) o).getHistorial());
+                pstmt.setString(8, ((Escaladors) o).getFita());
+                pstmt.executeUpdate();
+                Vista.mostrarMissatge("Registre insertat correctament.");
             } catch (SQLException e) {
-                throw new RuntimeException(e);
+                System.err.println("Error al insertar en la base de dades: " + e.getMessage());
             }
+        } else {
+            throw new IllegalArgumentException("L'objecte proporcionat no es una instancia d'Escaladors.");
         }
     }
 
 
     public static void actualitzar(Connection con,String id, String quequiero, String comoquiero) {
         try (Statement stmt = con.createStatement()) {
-            stmt.executeQuery("UPDATE escaladors SET " + quequiero + " = " + comoquiero + " WHERE escalador_id = " + id);
+            String sql = "UPDATE escaladors SET " + quequiero + " = '" + comoquiero + "' WHERE escalador_id = " + id;
+            stmt.executeUpdate(sql); // Usa executeUpdate para consultas de actualización
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error al actualitzar la base de dades", e);
         }
     }
 
 
-    public static void llistarID(Connection con,String id) {
-        try (Statement stmt = con.createStatement()) {
-            stmt.executeQuery("SELECT * FROM escaladors WHERE escalador_id = " + id);
+    public static String llistarID(Connection con,String id) {
+        String fi = "";
+        try (PreparedStatement stmt = con.prepareStatement("SELECT * FROM escaladors WHERE escalador_id = " + id)) {
+            ResultSet rs = stmt.executeQuery(); // Ejecutar y obtener resultados
+            ResultSetMetaData metaData = rs.getMetaData();
+            while (rs.next()) {
+                for (int i = 1; i <= metaData.getColumnCount(); i++) {
+                    fi += metaData.getColumnName(i) + ": " + rs.getString(metaData.getColumnName(i)) + (i < metaData.getColumnCount() ? ", " : "");
+                }
+                fi += "\n";
+            }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error al llistar per id", e);
         }
+        return fi;
     }
 
 
-    public static void llistarTot(Connection con) {
-        try (Statement stmt = con.createStatement()) {
-            stmt.executeQuery("SELECT * FROM escaladors");
+    public static String llistarTot(Connection con) {
+        String fi = "";
+        try (PreparedStatement stmt = con.prepareStatement("SELECT * FROM escaladors")) {
+            ResultSet rs = stmt.executeQuery(); // Ejecutar y obtener resultados
+            ResultSetMetaData metaData = rs.getMetaData();
+            while (rs.next()) {
+                for (int i = 1; i <= metaData.getColumnCount(); i++) {
+                    fi += metaData.getColumnName(i) + ": " + rs.getString(metaData.getColumnName(i)) + (i < metaData.getColumnCount() ? ", " : "");
+                }
+                fi += "\n";
+            }
+
+            if (fi.equals("")) fi = "No hi ha dades";
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error al llistar tot", e);
         }
+        return fi;
     }
 
 
     public static void esborrar(Connection con,String id) {
         try (Statement stmt = con.createStatement()) {
-            stmt.executeQuery("DELETE FROM escaladors WHERE escalador_id = " + id);
+            int rowsAffected = stmt.executeUpdate("DELETE FROM escaladors WHERE escalador_id = " + id);
+            if (rowsAffected > 0) {
+                System.out.println("La tabla ha sigut eliminada amb éxit.");
+            } else {
+                System.out.println("No s'ha trobat cap fila amb el id especificat.");
+            }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error al eliminar la taula", e);
         }
     }
 }

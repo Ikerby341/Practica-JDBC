@@ -1,6 +1,6 @@
 import controller.*;
 import dao.DBConnection;
-import dao.sqlite.SQLiteEscolesDAO;
+import dao.sqlite.*;
 import view.Vista;
 import model.*;
 import java.sql.Connection;
@@ -67,6 +67,7 @@ public class Main {
             case 4:
                 Vista.mostrarSubmenuEscaladors();
                 scanOpcio(5);
+                switchEscaladors();
                 break;
             default:
                 Vista.mostrarMissatge("Has finalitzat el programa.");
@@ -133,6 +134,72 @@ public class Main {
                     SQLiteEscolesDAO.esborrar(conexio, nomE);
                 } catch (Exception e) {
                     Vista.mostrarMissatge("Error al eliminar l'escola: " + e.getMessage());
+                }
+                Vista.mostrarMissatge("Pulsa enter per continuar...");
+                scan.nextLine();
+                break;
+            default:
+                break;
+        }
+    }
+
+    /* SubMenu Gestio Escaladors */
+
+    private static void switchEscaladors() {
+        Connection conexio = DBConnection.getConnexio();
+        switch (opcio) {
+            case 1:
+                try{
+                    Escaladors escalador = EscaladorsController.crearEscalador();
+                    SQLiteEscaladorsDAO.crear(conexio,escalador);
+                }catch (Exception e){
+                    Vista.mostrarMissatge("Error al crear l'escalador: " + e.getMessage());
+                }
+                Vista.mostrarMissatge("Pulsa enter per continuar...");
+                scan.nextLine();
+                break;
+            case 2:
+                try {
+                    Vista.mostrarMissatge("Digues la id del escalador que vols actualitzar");
+                    String id = scan.nextLine();
+                    Vista.mostrarMissatge("Digues el que vols canviar (nom,alies,num_vies...)");
+                    String quequiero = scan.nextLine();
+                    Vista.mostrarMissatge("Digues el que vols posar");
+                    String comoquiero = scan.nextLine();
+                    SQLiteEscaladorsDAO.actualitzar(conexio, id, quequiero, comoquiero);
+                } catch (Exception e) {
+                    Vista.mostrarMissatge("Error al actualitzar l'escalador: " + e.getMessage());
+                }
+                Vista.mostrarMissatge("Pulsa enter per continuar...");
+                scan.nextLine();
+                break;
+            case 3:
+                try {
+                    Vista.mostrarMissatge("Digues la id del escalador que vols cercar");
+                    String id = scan.nextLine();
+                    Vista.mostrarMissatge(SQLiteEscaladorsDAO.llistarID(conexio,id));
+                } catch (Exception e) {
+                    Vista.mostrarMissatge("Error al cercar l'escalador: " + e.getMessage());
+                }
+                Vista.mostrarMissatge("Pulsa enter per continuar...");
+                scan.nextLine();
+                break;
+            case 4:
+                try {
+                    Vista.mostrarMissatge(SQLiteEscaladorsDAO.llistarTot(conexio));
+                } catch (Exception e){
+                    Vista.mostrarMissatge("Error al llistar els escaladors: " + e.getMessage());
+                }
+                Vista.mostrarMissatge("Pulsa enter per continuar...");
+                scan.nextLine();
+                break;
+            case 5:
+                try {
+                    Vista.mostrarMissatge("Digues la id del escalador que vols eliminar");
+                    String idE = scan.nextLine();
+                    SQLiteEscaladorsDAO.esborrar(conexio, idE);
+                } catch (Exception e) {
+                    Vista.mostrarMissatge("Error al eliminar l'escalador: " + e.getMessage());
                 }
                 Vista.mostrarMissatge("Pulsa enter per continuar...");
                 scan.nextLine();

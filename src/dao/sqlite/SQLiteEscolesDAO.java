@@ -13,15 +13,15 @@ public class SQLiteEscolesDAO implements DAO {
                 pstmt.setString(2, ((Escoles) o).getLloc());
                 pstmt.setString(3, ((Escoles) o).getAproximacio());
                 pstmt.setInt(4, ((Escoles) o).getVies());
-                pstmt.setString(5, ((Escoles) o).getPopularitat()); // Cambia si el tipo de dato es diferente
+                pstmt.setString(5, ((Escoles) o).getPopularitat());
                 pstmt.setString(6, ((Escoles) o).getRestriccions());
                 pstmt.executeUpdate();
-                Vista.mostrarMissatge("Registro insertado correctamente.");
+                Vista.mostrarMissatge("Registre insertat correctament.");
             } catch (SQLException e) {
-                System.err.println("Error al insertar en la base de datos: " + e.getMessage());
+                System.err.println("Error al insertar en la base de dades: " + e.getMessage());
             }
         } else {
-            throw new IllegalArgumentException("El objeto proporcionado no es una instancia de Escoles.");
+            throw new IllegalArgumentException("L'objecte proporcionat no es una instancia d'Escoles.");
         }
     }
 
@@ -69,7 +69,7 @@ public class SQLiteEscolesDAO implements DAO {
             String sql = "UPDATE escoles SET " + quequiero + " = '" + comoquiero + "' WHERE nom = '" + Nom + "'";
             stmt.executeUpdate(sql); // Usa executeUpdate para consultas de actualización
         } catch (SQLException e) {
-            throw new RuntimeException("Error al actualizar la base de datos", e);
+            throw new RuntimeException("Error al actualitzar la base de dades", e);
         }
     }
 
