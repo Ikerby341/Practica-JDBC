@@ -28,20 +28,17 @@ public class SQLiteEscolesDAO implements DAO {
 
     public static String llistarID(Connection con, String nom) {
         String fi = "";
-        try (PreparedStatement stmt = con.prepareStatement("SELECT * FROM escoles WHERE nom = ?")) {
-            stmt.setString(1, nom); // Evitar inyecciones SQL
+        try (PreparedStatement stmt = con.prepareStatement("SELECT * FROM escoles WHERE nom = '" + nom + "'")) {
             ResultSet rs = stmt.executeQuery(); // Ejecutar y obtener resultados
-
+            ResultSetMetaData metaData = rs.getMetaData();
             while (rs.next()) {
-                fi += ("Nom: " + rs.getString("nom") +
-                        ", Lloc: " + rs.getString("lloc") +
-                        ", Aproximacio: " + rs.getString("aproximacio") +
-                        ", Vies: " + rs.getInt("vies") +
-                        ", Popularitat: " + rs.getString("popularitat") +
-                        ", Restriccions: " + rs.getString("restriccions"));
+                for (int i = 1; i <= metaData.getColumnCount(); i++) {
+                    fi += metaData.getColumnName(i) + ": " + rs.getString(metaData.getColumnName(i)) + (i < metaData.getColumnCount() ? ", " : "");
+                }
+                fi += "\n";
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Error al listar por ID", e);
+            throw new RuntimeException("Error al llistar per nom", e);
         }
         return fi;
     }
@@ -67,20 +64,28 @@ public class SQLiteEscolesDAO implements DAO {
 
 
 
-    public static void actualitzar(Connection con,String Nom, String quequiero, String comoquiero) {
+    public static void actualitzar(Connection con, String Nom, String quequiero, String comoquiero) {
         try (Statement stmt = con.createStatement()) {
-            stmt.executeQuery("UPDATE escoles SET " + quequiero + " = " + comoquiero + " WHERE nom = " + Nom);
+            String sql = "UPDATE escoles SET " + quequiero + " = '" + comoquiero + "' WHERE nom = '" + Nom + "'";
+            stmt.executeUpdate(sql); // Usa executeUpdate para consultas de actualización
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error al actualizar la base de datos", e);
         }
     }
 
 
-    public static void esborrar(Connection con,String Nom) {
+
+    public static void esborrar(Connection con, String Nom) {
         try (Statement stmt = con.createStatement()) {
-            stmt.executeQuery("DELETE FROM escoles WHERE nom = " + Nom);
+            int rowsAffected = stmt.executeUpdate("DELETE FROM escoles WHERE nom = '" + Nom + "'");
+            if (rowsAffected > 0) {
+                System.out.println("La tabla ha sigut eliminada amb éxit.");
+            } else {
+                System.out.println("No s'ha trobat cap fila amb el nom especificat.");
+            }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error al eliminar la taula", e);
         }
     }
+
 }
