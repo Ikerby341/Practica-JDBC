@@ -6,26 +6,26 @@ public class Escaladors {
     private final int edat;
     private final String nivell;
     private final int id_via;
-    private final TipusEstilPreferit estil_pref;
+    private final String estil_pref;
     private final String historial;
     private final String fita;
 
-    public Escaladors(String nom, String alies, int edat, String nivell, int id_via, TipusEstilPreferit estil_pref, String historial, String fita) {
+    public Escaladors(String nom, String alies, int edat, String nivell, int id_via, String estil_pref, String historial, String fita) {
         this.nom = nom;
         this.alies = alies;
         this.edat = edat;
         this.nivell = nivell;
         this.id_via = id_via;
-        this.estil_pref = estil_pref;
+        if(estil_pref.toLowerCase().equals("esportiva") || estil_pref.toLowerCase().equals("classica") ||   estil_pref.toLowerCase().equals("gel")) {
+            this.estil_pref = estil_pref.toLowerCase();
+        } else {
+            throw new IllegalArgumentException("L'estil preferit ha de ser esportiva, classica o gel");
+        }
         this.historial = historial;
         this.fita = fita;
     }
 
-    public enum TipusEstilPreferit {
-        ESPORTIVA,
-        CLASSICA,
-        GEL
-    }
+
 
     public String getNom() {
         return nom;
@@ -47,7 +47,7 @@ public class Escaladors {
         return id_via;
     }
 
-    public TipusEstilPreferit getEstil_pref() {
+    public String getEstil_pref() {
         return estil_pref;
     }
 

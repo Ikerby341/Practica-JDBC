@@ -5,23 +5,23 @@ public class Escoles {
     private final String lloc;
     private final String aproximacio;
     private final int num_vies;
-    private final TipusPopularitat popularitat;
+    private final String popularitat;
     private final String restriccions;
 
-    public Escoles(String nom, String lloc, String aproximacio, int num_vies, TipusPopularitat popularitat, String restriccions) {
+    public Escoles(String nom, String lloc, String aproximacio, int num_vies, String popularitat, String restriccions) {
         this.nom = nom;
         this.lloc = lloc;
         this.aproximacio = aproximacio;
         this.num_vies = num_vies;
-        this.popularitat = popularitat;
+        if (popularitat.toLowerCase().equals("alta") || popularitat.toLowerCase().equals("mitjana") || popularitat.toLowerCase().equals("baixa")) {
+            this.popularitat = popularitat.toLowerCase();
+        } else {
+            throw new IllegalArgumentException("La popularitat ha de ser alta, mitjana o baixa");
+        }
         this.restriccions = restriccions;
     }
 
-    public enum TipusPopularitat {
-        BAIXA,
-        MITJANA,
-        ALTA
-    }
+
 
     public String getNom() {
         return nom;
@@ -39,7 +39,7 @@ public class Escoles {
         return num_vies;
     }
 
-    public TipusPopularitat getPopularitat() {
+    public String getPopularitat() {
         return popularitat;
     }
 

@@ -6,24 +6,24 @@ public class Sectors {
     private final long longitud;
     private final String aproximacio;
     private final int numVies;
-    private final TipusPopularitat popularitat;
+    private final String popularitat;
     private final String restriccions;
 
-    public Sectors(String nom, String latitud, long longitud, String aproximacio, int numVies, TipusPopularitat popularitat, String restriccions) {
+    public Sectors(String nom, String latitud, long longitud, String aproximacio, int numVies, String popularitat, String restriccions) {
         this.nom = nom;
         this.latitud = latitud;
         this.longitud = longitud;
         this.aproximacio = aproximacio;
         this.numVies = numVies;
-        this.popularitat = popularitat;
+        if (popularitat.toLowerCase().equals("alta") || popularitat.toLowerCase().equals("mitjana") || popularitat.toLowerCase().equals("baixa")) {
+            this.popularitat = popularitat.toLowerCase();
+        } else {
+            throw new IllegalArgumentException("La popularitat ha de ser alta, mitjana o baixa");
+        }
         this.restriccions = restriccions;
     }
 
-    public enum TipusPopularitat {
-        BAIXA,
-        MITJANA,
-        ALTA
-    }
+
 
     public String getNom() {
         return nom;
@@ -45,7 +45,7 @@ public class Sectors {
         return numVies;
     }
 
-    public TipusPopularitat getPopularitat() {
+    public String getPopularitat() {
         return popularitat;
     }
 
