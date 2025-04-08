@@ -17,8 +17,7 @@ public class SectorsController {
         String aproximacio = scan.nextLine();
         int numVies = scan.nextInt();
         scan.nextLine();
-        String tipusPopularitatInput = scan.nextLine();
-        Sectors.TipusPopularitat tipusPopularitat = Sectors.TipusPopularitat.valueOf(tipusPopularitatInput);
+        String tipusPopularitat = scan.nextLine();
         String restriccions = scan.nextLine();
 
         return new Sectors(nom, latitud, longitud, aproximacio, numVies, tipusPopularitat, restriccions);

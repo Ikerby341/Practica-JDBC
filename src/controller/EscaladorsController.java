@@ -18,10 +18,9 @@ public class EscaladorsController {
         int id_via = scan.nextInt();
         scan.nextLine();
         String estil_pref = scan.nextLine();
-        Escaladors.TipusEstilPreferit tipusEstilPreferit = Escaladors.TipusEstilPreferit.valueOf(estil_pref);
         String historial = scan.nextLine();
         String fita = scan.nextLine();
 
-        return new Escaladors(nom, alies, edat, nivell, id_via, tipusEstilPreferit, historial, fita);
+        return new Escaladors(nom, alies, edat, nivell, id_via, estil_pref, historial, fita);
     }
 }

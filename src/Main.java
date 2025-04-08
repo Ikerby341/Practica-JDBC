@@ -82,38 +82,59 @@ public class Main {
         Connection conexio = DBConnection.getConnexio();
         switch (opcio) {
             case 1:
-                Escoles escola = EscolesController.crearEscola();
-                SQLiteEscolesDAO.crear(conexio,escola);
+                try{
+                    Escoles escola = EscolesController.crearEscola();
+                    SQLiteEscolesDAO.crear(conexio,escola);
+                }catch (Exception e){
+                    Vista.mostrarMissatge("Error al crear l'escola: " + e.getMessage());
+                }
                 Vista.mostrarMissatge("Pulsa enter per continuar...");
                 scan.nextLine();
                 break;
             case 2:
-                Vista.mostrarMissatge("Digues el nom de la escola que vols actualitzar");
-                String id = scan.nextLine();
-                Vista.mostrarMissatge("Digues el que vols canviar (nom,lloc,num_vies...)");
-                String quequiero = scan.nextLine();
-                Vista.mostrarMissatge("Digues el que vols posar");
-                String comoquiero = scan.nextLine();
-                SQLiteEscolesDAO.actualitzar(conexio,id,quequiero,comoquiero);
+                try {
+                    Vista.mostrarMissatge("Digues el nom de la escola que vols actualitzar");
+                    String id = scan.nextLine();
+                    Vista.mostrarMissatge("Digues el que vols canviar (nom,lloc,num_vies...)");
+                    String quequiero = scan.nextLine();
+                    Vista.mostrarMissatge("Digues el que vols posar");
+                    String comoquiero = scan.nextLine();
+                    SQLiteEscolesDAO.actualitzar(conexio, id, quequiero, comoquiero);
+                } catch (Exception e) {
+                    Vista.mostrarMissatge("Error al actualitzar l'escola: " + e.getMessage());
+                }
                 Vista.mostrarMissatge("Pulsa enter per continuar...");
                 scan.nextLine();
                 break;
             case 3:
-                Vista.mostrarMissatge("Digues el nom de la escola que vols cercar");
-                String nom = scan.nextLine();
-                Vista.mostrarMissatge(SQLiteEscolesDAO.llistarID(conexio,nom));
+                try {
+                    Vista.mostrarMissatge("Digues el nom de la escola que vols cercar");
+                    String nom = scan.nextLine();
+                    Vista.mostrarMissatge(SQLiteEscolesDAO.llistarID(conexio,nom));
+                } catch (Exception e) {
+                    Vista.mostrarMissatge("Error al cercar l'escola: " + e.getMessage());
+                }
                 Vista.mostrarMissatge("Pulsa enter per continuar...");
                 scan.nextLine();
                 break;
             case 4:
-                Vista.mostrarMissatge(SQLiteEscolesDAO.llistarTot(conexio));
+                try {
+                    Vista.mostrarMissatge(SQLiteEscolesDAO.llistarTot(conexio));
+                } catch (Exception e){
+                    Vista.mostrarMissatge("Error al llistar les escoles: " + e.getMessage());
+                }
                 Vista.mostrarMissatge("Pulsa enter per continuar...");
                 scan.nextLine();
                 break;
             case 5:
-                Vista.mostrarMissatge("Digues el nom de la escola que vols eliminar");
-                String nomE = scan.nextLine();
-                SQLiteEscolesDAO.esborrar(conexio,nomE);Vista.mostrarMissatge("Pulsa enter per continuar...");
+                try {
+                    Vista.mostrarMissatge("Digues el nom de la escola que vols eliminar");
+                    String nomE = scan.nextLine();
+                    SQLiteEscolesDAO.esborrar(conexio, nomE);
+                } catch (Exception e) {
+                    Vista.mostrarMissatge("Error al eliminar l'escola: " + e.getMessage());
+                }
+                Vista.mostrarMissatge("Pulsa enter per continuar...");
                 scan.nextLine();
                 break;
             default:

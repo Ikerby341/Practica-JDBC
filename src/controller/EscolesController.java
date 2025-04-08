@@ -20,8 +20,7 @@ public class EscolesController {
         int vies = scan.nextInt();
         scan.nextLine();
         Vista.mostrarMissatge("Escull quina popularitat té (BAIXA, MITJANA, ALTA):");
-        String tipusPopularitatInput = scan.nextLine();
-        Escoles.TipusPopularitat tipusPopularitat = Escoles.TipusPopularitat.valueOf(tipusPopularitatInput);
+        String tipusPopularitat = scan.nextLine();
         Vista.mostrarMissatge("Quines prohibicions durant certes èpoques de l’any té? (Ex: Nidificació d’aus)");
         String restriccions = scan.nextLine();
 
