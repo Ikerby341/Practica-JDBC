@@ -208,4 +208,70 @@ public class Main {
                 break;
         }
     }
+
+    /* SubMenu Gestio Sectors */
+
+    private static void switchSectors() {
+        Connection conexio = DBConnection.getConnexio();
+        switch (opcio) {
+            case 1:
+                try{
+                    Sectors sector = SectorsController.crearSectors();
+                    SQLiteSectorsDAO.crear(conexio,sector);
+                }catch (Exception e){
+                    Vista.mostrarMissatge("Error al crear el sector: " + e.getMessage());
+                }
+                Vista.mostrarMissatge("Pulsa enter per continuar...");
+                scan.nextLine();
+                break;
+            case 2:
+                try {
+                    Vista.mostrarMissatge("Digues la id del sector que vols actualitzar");
+                    String id = scan.nextLine();
+                    Vista.mostrarMissatge("Digues el que vols canviar (nom,latitud,num_vies...)");
+                    String quequiero = scan.nextLine();
+                    Vista.mostrarMissatge("Digues el que vols posar");
+                    String comoquiero = scan.nextLine();
+                    SQLiteSectorsDAO.actualitzar(conexio, id, quequiero, comoquiero);
+                } catch (Exception e) {
+                    Vista.mostrarMissatge("Error al actualitzar l'escalador: " + e.getMessage());
+                }
+                Vista.mostrarMissatge("Pulsa enter per continuar...");
+                scan.nextLine();
+                break;
+            case 3:
+                try {
+                    Vista.mostrarMissatge("Digues la id del sector que vols cercar");
+                    String id = scan.nextLine();
+                    Vista.mostrarMissatge(SQLiteSectorsDAO.llistarID(conexio,id));
+                } catch (Exception e) {
+                    Vista.mostrarMissatge("Error al cercar el sector: " + e.getMessage());
+                }
+                Vista.mostrarMissatge("Pulsa enter per continuar...");
+                scan.nextLine();
+                break;
+            case 4:
+                try {
+                    Vista.mostrarMissatge(SQLiteSectorsDAO.llistarTot(conexio));
+                } catch (Exception e){
+                    Vista.mostrarMissatge("Error al llistar els sectors: " + e.getMessage());
+                }
+                Vista.mostrarMissatge("Pulsa enter per continuar...");
+                scan.nextLine();
+                break;
+            case 5:
+                try {
+                    Vista.mostrarMissatge("Digues la id del sector que vols eliminar");
+                    String idS = scan.nextLine();
+                    SQLiteSectorsDAO.esborrar(conexio, idS);
+                } catch (Exception e) {
+                    Vista.mostrarMissatge("Error al eliminar el sector: " + e.getMessage());
+                }
+                Vista.mostrarMissatge("Pulsa enter per continuar...");
+                scan.nextLine();
+                break;
+            default:
+                break;
+        }
+    }
 }
