@@ -309,7 +309,7 @@ public class Main {
                 break;
             case 3:
                 try {
-                    Vista.mostrarMissatge("Digues la nom de la via que vols cercar");
+                    Vista.mostrarMissatge("Digues el nom de la via que vols cercar");
                     String nom = scan.nextLine();
                     Vista.mostrarMissatge(SQLiteViesDAO.llistarID(conexio,nom));
                 } catch (Exception e) {
