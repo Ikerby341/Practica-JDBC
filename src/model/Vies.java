@@ -4,7 +4,7 @@ public class Vies {
     private final String tipusVia;
     private final String nom;
     private final int llargada;
-    private final String grauDificultat;
+    private String grauDificultat = "";
     private final String orientacio;
     private final String estat;
     private final String escola;
