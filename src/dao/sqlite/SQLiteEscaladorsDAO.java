@@ -10,7 +10,7 @@ public class SQLiteEscaladorsDAO implements DAO {
 
     public static void crear(Connection con,Object o) {
         if (o instanceof Escaladors) {
-            String sql = "INSERT INTO escoles (nom, alies, edat, nivell, via_id, estil_preferit, historial, fita) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO escaladors (nom, alies, edat, nivell, via_id, estil_preferit, historial, fita) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement pstmt = con.prepareStatement(sql)) {
                 pstmt.setString(1, ((Escaladors) o).getNom());
                 pstmt.setString(2, ((Escaladors) o).getAlies());

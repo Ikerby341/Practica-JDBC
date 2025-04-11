@@ -59,10 +59,12 @@ public class Main {
             case 2:
                 Vista.mostrarSubmenuSectors();
                 scanOpcio(5);
+                switchSectors();
                 break;
             case 3:
                 Vista.mostrarSubmenuVies();
                 scanOpcio(5);
+                switchVies();
                 break;
             case 4:
                 Vista.mostrarSubmenuEscaladors();
@@ -234,7 +236,7 @@ public class Main {
                     String comoquiero = scan.nextLine();
                     SQLiteSectorsDAO.actualitzar(conexio, id, quequiero, comoquiero);
                 } catch (Exception e) {
-                    Vista.mostrarMissatge("Error al actualitzar l'escalador: " + e.getMessage());
+                    Vista.mostrarMissatge("Error al actualitzar el sector: " + e.getMessage());
                 }
                 Vista.mostrarMissatge("Pulsa enter per continuar...");
                 scan.nextLine();
@@ -266,6 +268,72 @@ public class Main {
                     SQLiteSectorsDAO.esborrar(conexio, idS);
                 } catch (Exception e) {
                     Vista.mostrarMissatge("Error al eliminar el sector: " + e.getMessage());
+                }
+                Vista.mostrarMissatge("Pulsa enter per continuar...");
+                scan.nextLine();
+                break;
+            default:
+                break;
+        }
+    }
+
+    /* SubMenu Gestio Vies */
+
+    private static void switchVies() {
+        Connection conexio = DBConnection.getConnexio();
+        switch (opcio) {
+            case 1:
+                try{
+                    Vies via = ViesController.crearVia();
+                    SQLiteViesDAO.crear(conexio,via);
+                }catch (Exception e){
+                    Vista.mostrarMissatge("Error al crear la via: " + e.getMessage());
+                }
+                Vista.mostrarMissatge("Pulsa enter per continuar...");
+                scan.nextLine();
+                break;
+            case 2:
+                try {
+                    Vista.mostrarMissatge("Digues la id de la via que vols actualitzar");
+                    String id = scan.nextLine();
+                    Vista.mostrarMissatge("Digues el que vols canviar (nom,llargada,grau_dificultat...)");
+                    String quequiero = scan.nextLine();
+                    Vista.mostrarMissatge("Digues el que vols posar");
+                    String comoquiero = scan.nextLine();
+                    SQLiteViesDAO.actualitzar(conexio, id, quequiero, comoquiero);
+                } catch (Exception e) {
+                    Vista.mostrarMissatge("Error al actualitzar la via: " + e.getMessage());
+                }
+                Vista.mostrarMissatge("Pulsa enter per continuar...");
+                scan.nextLine();
+                break;
+            case 3:
+                try {
+                    Vista.mostrarMissatge("Digues la id de la via que vols cercar");
+                    String id = scan.nextLine();
+                    Vista.mostrarMissatge(SQLiteViesDAO.llistarID(conexio,id));
+                } catch (Exception e) {
+                    Vista.mostrarMissatge("Error al cercar la via: " + e.getMessage());
+                }
+                Vista.mostrarMissatge("Pulsa enter per continuar...");
+                scan.nextLine();
+                break;
+            case 4:
+                try {
+                    Vista.mostrarMissatge(SQLiteViesDAO.llistarTot(conexio));
+                } catch (Exception e){
+                    Vista.mostrarMissatge("Error al llistar les vies: " + e.getMessage());
+                }
+                Vista.mostrarMissatge("Pulsa enter per continuar...");
+                scan.nextLine();
+                break;
+            case 5:
+                try {
+                    Vista.mostrarMissatge("Digues la id de la via que vols eliminar");
+                    String idS = scan.nextLine();
+                    SQLiteViesDAO.esborrar(conexio, idS);
+                } catch (Exception e) {
+                    Vista.mostrarMissatge("Error al eliminar la via: " + e.getMessage());
                 }
                 Vista.mostrarMissatge("Pulsa enter per continuar...");
                 scan.nextLine();
