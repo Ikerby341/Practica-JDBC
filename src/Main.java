@@ -177,9 +177,9 @@ public class Main {
                 break;
             case 3:
                 try {
-                    Vista.mostrarMissatge("Digues la id del escalador que vols cercar");
-                    String id = scan.nextLine();
-                    Vista.mostrarMissatge(SQLiteEscaladorsDAO.llistarID(conexio,id));
+                    Vista.mostrarMissatge("Digues el nom del escalador que vols cercar");
+                    String nom = scan.nextLine();
+                    Vista.mostrarMissatge(SQLiteEscaladorsDAO.llistarID(conexio,nom));
                 } catch (Exception e) {
                     Vista.mostrarMissatge("Error al cercar l'escalador: " + e.getMessage());
                 }
@@ -243,11 +243,11 @@ public class Main {
                 break;
             case 3:
                 try {
-                    Vista.mostrarMissatge("Digues la id del sector que vols cercar");
-                    String id = scan.nextLine();
-                    Vista.mostrarMissatge(SQLiteSectorsDAO.llistarID(conexio,id));
+                    Vista.mostrarMissatge("Digues el nom del sector que vols cercar");
+                    String nom = scan.nextLine();
+                    Vista.mostrarMissatge(SQLiteSectorsDAO.llistarID(conexio,nom));
                 } catch (Exception e) {
-                    Vista.mostrarMissatge("Error al cercar el sector: " + e.getMessage());
+                    Vista.mostrarMissatge("Error al cercar el nom del sector: " + e.getMessage());
                 }
                 Vista.mostrarMissatge("Pulsa enter per continuar...");
                 scan.nextLine();
@@ -309,9 +309,9 @@ public class Main {
                 break;
             case 3:
                 try {
-                    Vista.mostrarMissatge("Digues la id de la via que vols cercar");
-                    String id = scan.nextLine();
-                    Vista.mostrarMissatge(SQLiteViesDAO.llistarID(conexio,id));
+                    Vista.mostrarMissatge("Digues la nom de la via que vols cercar");
+                    String nom = scan.nextLine();
+                    Vista.mostrarMissatge(SQLiteViesDAO.llistarID(conexio,nom));
                 } catch (Exception e) {
                     Vista.mostrarMissatge("Error al cercar la via: " + e.getMessage());
                 }

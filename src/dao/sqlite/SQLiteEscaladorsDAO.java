@@ -41,9 +41,9 @@ public class SQLiteEscaladorsDAO implements DAO {
     }
 
 
-    public static String llistarID(Connection con,String id) {
+    public static String llistarID(Connection con,String nom) {
         String fi = "";
-        try (PreparedStatement stmt = con.prepareStatement("SELECT * FROM escaladors WHERE escalador_id = " + id)) {
+        try (PreparedStatement stmt = con.prepareStatement("SELECT * FROM escaladors WHERE nom = '" + nom + "'")) {
             ResultSet rs = stmt.executeQuery(); // Ejecutar y obtener resultados
             ResultSetMetaData metaData = rs.getMetaData();
             while (rs.next()) {
@@ -53,7 +53,7 @@ public class SQLiteEscaladorsDAO implements DAO {
                 fi += "\n";
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Error al llistar per id", e);
+            throw new RuntimeException("Error al llistar per nom", e);
         }
         return fi;
     }

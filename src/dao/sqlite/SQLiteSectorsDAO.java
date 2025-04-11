@@ -40,9 +40,9 @@ public class SQLiteSectorsDAO implements DAO {
     }
 
 
-    public static String llistarID(Connection con, String id) {
+    public static String llistarID(Connection con, String nom) {
         String fi = "";
-        try (PreparedStatement stmt = con.prepareStatement("SELECT * FROM sectors WHERE sector_id = " + id)) {
+        try (PreparedStatement stmt = con.prepareStatement("SELECT * FROM sectors WHERE nom = '" + nom + "'")) {
             ResultSet rs = stmt.executeQuery(); // Ejecutar y obtener resultados
             ResultSetMetaData metaData = rs.getMetaData();
             while (rs.next()) {
@@ -52,7 +52,7 @@ public class SQLiteSectorsDAO implements DAO {
                 fi += "\n";
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Error al llistar per id", e);
+            throw new RuntimeException("Error al llistar per nom", e);
         }
         return fi;
     }
