@@ -21,9 +21,29 @@ public class Vies {
         }
         this.nom = nom;
         this.llargada = llargada;
-        this.grauDificultat = grauDificultat;
-        this.orientacio = orientacio;
-        this.estat = estat;
+        if (tipusVia.toLowerCase().equals("esportiva") || tipusVia.toLowerCase().equals("classica")) {
+            if (grauDificultat.equals("4") || grauDificultat.equals("4+") || grauDificultat.equals("5") || grauDificultat.equals("5+") || grauDificultat.equals("6a") || grauDificultat.equals("6a+") || grauDificultat.equals("6b") || grauDificultat.equals("6b+") || grauDificultat.equals("6c") || grauDificultat.equals("6c+") || grauDificultat.equals("7a") || grauDificultat.equals("7a+") || grauDificultat.equals("7b") || grauDificultat.equals("7b+") || grauDificultat.equals("7c") || grauDificultat.equals("7c+") || grauDificultat.equals("8a") || grauDificultat.equals("8a+") || grauDificultat.equals("8b") || grauDificultat.equals("8b+") || grauDificultat.equals("8c") || grauDificultat.equals("8c+") || grauDificultat.equals("9a") || grauDificultat.equals("9a+") || grauDificultat.equals("9b") || grauDificultat.equals("9b+") || grauDificultat.equals("9c") || grauDificultat.equals("9c+")) {
+                this.grauDificultat = grauDificultat;
+            } else {
+                throw new IllegalArgumentException("El grau de dificultat en vies esportives i classiques ha de ser 4, 4+, 5, 5+, 6a, 6a+, 6b, 6b+, 6c, 6c+, 7a, 7a+, 7b, 7b+, 7c, 7c+, 8a, 8a+, 8b, 8b+, 8c, 8c+, 9a, 9a+, 9b, 9b+, 9c o 9c+");
+            }
+        } else if (tipusVia.toLowerCase().equals("gel")){
+            if (grauDificultat.equals("4") || grauDificultat.equals("4+") || grauDificultat.equals("5") || grauDificultat.equals("5+") || grauDificultat.equals("6a") || grauDificultat.equals("6a+") || grauDificultat.equals("6b") || grauDificultat.equals("6b+") || grauDificultat.equals("6c") || grauDificultat.equals("6c+") || grauDificultat.equals("7a") || grauDificultat.equals("7a+") || grauDificultat.equals("7b") || grauDificultat.equals("7b+") || grauDificultat.equals("7c") || grauDificultat.equals("7c+") || grauDificultat.equals("8a") || grauDificultat.equals("8a+") || grauDificultat.equals("8b")) {
+                this.grauDificultat = grauDificultat;
+            } else {
+                throw new IllegalArgumentException("El grau de dificultat en vies de gel ha de ser 4, 4+, 5, 5+, 6a, 6a+, 6b, 6b+, 6c, 6c+, 7a, 7a+, 7b, 7b+, 7c, 7c+, 8a, 8a+, 8b");
+            }
+        }
+        if (orientacio.toUpperCase().equals("N") || orientacio.toUpperCase().equals("NE") || orientacio.toUpperCase().equals("NO") || orientacio.toUpperCase().equals("SE") || orientacio.toUpperCase().equals("SO") || orientacio.toUpperCase().equals("E") || orientacio.toUpperCase().equals("O") || orientacio.toUpperCase().equals("S")) {
+            this.orientacio = orientacio.toUpperCase();
+        } else {
+            throw new IllegalArgumentException("L'orientació ha de ser N, NE, NO, SE, SO, E, O o S");
+        }
+        if (estat.toLowerCase().equals("apte") || estat.toLowerCase().equals("construccio") || estat.toLowerCase().equals("tancada")) {
+            this.estat = estat;
+        } else {
+            throw new IllegalArgumentException("L'estat ha de ser apte, construcció o tancada");
+        }
         this.escola = escola;
         this.sectorID = sectorID;
         if(ancoratges.toLowerCase().equals("friends") || ancoratges.toLowerCase().equals("tascons") || ancoratges.toLowerCase().equals("bagues") || ancoratges.toLowerCase().equals("pitons") || ancoratges.toLowerCase().equals("tricams") || ancoratges.toLowerCase().equals("bigbros") || ancoratges.toLowerCase().equals("spits") || ancoratges.toLowerCase().equals("parabolts") || ancoratges.toLowerCase().equals("quimics")) {
