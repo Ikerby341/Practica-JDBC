@@ -40,7 +40,9 @@ public class SQLiteViesDAO implements DAO {
             ResultSetMetaData metaData = rs.getMetaData();
             while (rs.next()) {
                 for (int i = 1; i <= metaData.getColumnCount(); i++) {
-                    fi += metaData.getColumnName(i) + ": " + rs.getString(metaData.getColumnName(i)) + (i < metaData.getColumnCount() ? ", " : "");
+                    String nomCol = metaData.getColumnName(i);
+                    String nomColumna = nomCol.substring(0, 1).toUpperCase() + nomCol.substring(1).replaceAll("_", " ");
+                    fi += nomColumna + ": " + rs.getString(metaData.getColumnName(i)) + (i < metaData.getColumnCount() ? "\n" : "");
                 }
                 fi += "\n";
             }
@@ -50,7 +52,6 @@ public class SQLiteViesDAO implements DAO {
         return fi;
     }
 
-
     public static String llistarTot(Connection con) {
         String fi = "";
         try (PreparedStatement stmt = con.prepareStatement("SELECT * FROM vies")) {
@@ -58,7 +59,9 @@ public class SQLiteViesDAO implements DAO {
             ResultSetMetaData metaData = rs.getMetaData();
             while (rs.next()) {
                 for (int i = 1; i <= metaData.getColumnCount(); i++) {
-                    fi += metaData.getColumnName(i) + ": " + rs.getString(metaData.getColumnName(i)) + (i < metaData.getColumnCount() ? ", " : "");
+                    String nomCol = metaData.getColumnName(i);
+                    String nomColumna = nomCol.substring(0, 1).toUpperCase() + nomCol.substring(1).replaceAll("_", " ");
+                    fi += nomColumna + ": " + rs.getString(metaData.getColumnName(i)) + (i < metaData.getColumnCount() ? "\n" : "");
                 }
                 fi += "\n";
             }
@@ -92,5 +95,26 @@ public class SQLiteViesDAO implements DAO {
         } catch (SQLException e) {
             throw new RuntimeException("Error al eliminar la taula", e);
         }
+    }
+
+    public static String llistarTotPerEscola(Connection con,String escola) {
+        String fi = "";
+        try (PreparedStatement stmt = con.prepareStatement("SELECT * FROM vies WHERE escola = '" + escola + "' AND estat = 'disponible'")) {
+            ResultSet rs = stmt.executeQuery(); // Ejecutar y obtener resultados
+            ResultSetMetaData metaData = rs.getMetaData();
+            while (rs.next()) {
+                for (int i = 1; i <= metaData.getColumnCount(); i++) {
+                    String nomCol = metaData.getColumnName(i);
+                    String nomColumna = nomCol.substring(0, 1).toUpperCase() + nomCol.substring(1).replaceAll("_", " ");
+                    fi += nomColumna + ": " + rs.getString(metaData.getColumnName(i)) + (i < metaData.getColumnCount() ? "\n" : "");
+                }
+                fi += "\n";
+            }
+
+            if (fi.equals("")) fi = "No hi ha dades";
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al llistar tot", e);
+        }
+        return fi;
     }
 }
