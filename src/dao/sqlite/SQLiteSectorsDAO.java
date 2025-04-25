@@ -1,9 +1,7 @@
 package dao.sqlite;
-import dao.DBConnection;
 import dao.interfaces.DAO;
 import model.*;
 import view.Vista;
-
 import java.sql.*;
 
 public class SQLiteSectorsDAO implements DAO {
@@ -93,6 +91,27 @@ public class SQLiteSectorsDAO implements DAO {
         } catch (SQLException e) {
             throw new RuntimeException("Error al eliminar la taula", e);
         }
+    }
+
+    public static String llistarAmbNumVies(Connection con, int numV) {
+        String fi = "";
+        try (PreparedStatement stmt = con.prepareStatement("SELECT * FROM sectors s WHERE (SELECT COUNT(*) FROM vies v WHERE v.sector_id = s.sector_id AND v.estat = 'Apte') >=" + numV)) {
+            ResultSet rs = stmt.executeQuery(); // Ejecutar y obtener resultados
+            ResultSetMetaData metaData = rs.getMetaData();
+            while (rs.next()) {
+                for (int i = 1; i <= metaData.getColumnCount(); i++) {
+                    String nomCol = metaData.getColumnName(i);
+                    String nomColumna = nomCol.substring(0, 1).toUpperCase() + nomCol.substring(1).replaceAll("_", " ");
+                    fi += nomColumna + ": " + rs.getString(metaData.getColumnName(i)) + (i < metaData.getColumnCount() ? "\n" : "");
+                }
+                fi += "\n";
+            }
+
+            if (fi.equals("")) fi = "No hi ha dades";
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al llistar tot", e);
+        }
+        return fi;
     }
 
 }

@@ -95,4 +95,25 @@ public class SQLiteEscaladorsDAO implements DAO {
             throw new RuntimeException("Error al eliminar la taula", e);
         }
     }
+
+    public static String llistarNivellMaxEscaladors(Connection con, String nivell) {
+        String resultat = "";
+        try (PreparedStatement stmt = con.prepareStatement("SELECT * FROM escaladors WHERE nivell = '" + nivell + "'")) {
+            ResultSet rs = stmt.executeQuery(); // Ejecutar y obtener resultados
+            ResultSetMetaData metaData = rs.getMetaData();
+            while (rs.next()) {
+                for (int i = 1; i <= metaData.getColumnCount(); i++) {
+                    String nomCol = metaData.getColumnName(i);
+                    String nomColumna = nomCol.substring(0, 1).toUpperCase() + nomCol.substring(1).replaceAll("_", " ");
+                    resultat += nomColumna + ": " + rs.getString(metaData.getColumnName(i)) + (i < metaData.getColumnCount() ? "\n" : "");
+                }
+                resultat += "\n";
+            }
+
+            if (resultat.isEmpty()) resultat = "No hi ha dades";
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al mostrar escaladors amb el mateix nivell indicat", e);
+        }
+        return resultat;
+    }
 }

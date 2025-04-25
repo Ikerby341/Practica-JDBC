@@ -33,6 +33,7 @@ public class Vista {
         Vista.mostrarMissatge("3) Cercar escalador");
         Vista.mostrarMissatge("4) Mostrar tots els escaladors");
         Vista.mostrarMissatge("5) Eliminar escalador");
+        Vista.mostrarMissatge("6) Mostrar escaladors amb el mateix nivell màxim assolit");
         Vista.mostrarMissatge("0) Tornar");
         Vista.mostrarMissatge("Selecciona una opció (0-5): ");
     }
@@ -56,6 +57,7 @@ public class Vista {
         Vista.mostrarMissatge("3) Cercar sector");
         Vista.mostrarMissatge("4) Mostrar tots els sectors");
         Vista.mostrarMissatge("5) Eliminar sector");
+        Vista.mostrarMissatge("6) Mostrar sectors amb més de X vies disponibles");
         Vista.mostrarMissatge("0) Tornar");
         Vista.mostrarMissatge("Selecciona una opció (0-5): ");
     }
@@ -70,6 +72,7 @@ public class Vista {
         Vista.mostrarMissatge("6) Mostrar vies disponibles en una escola");
         Vista.mostrarMissatge("7) Cercar vies per dificultat en un rang (via, grau, sector, escola)");
         Vista.mostrarMissatge("8) Cercar vies segons estat (Apte, Construcció, Tancada)");
+        Vista.mostrarMissatge("9) Mostrar les vies més llargues d’una escola determinada");
         Vista.mostrarMissatge("0) Tornar");
         Vista.mostrarMissatge("Selecciona una opció (0-5): ");
     }

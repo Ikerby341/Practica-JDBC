@@ -60,17 +60,17 @@ public class Main {
                 break;
             case 2:
                 Vista.mostrarSubmenuSectors();
-                scanOpcio(5);
+                scanOpcio(6);
                 switchSectors();
                 break;
             case 3:
                 Vista.mostrarSubmenuVies();
-                scanOpcio(8);
+                scanOpcio(9);
                 switchVies();
                 break;
             case 4:
                 Vista.mostrarSubmenuEscaladors();
-                scanOpcio(5);
+                scanOpcio(6);
                 switchEscaladors();
                 break;
             default:
@@ -217,6 +217,17 @@ public class Main {
                 Vista.mostrarMissatge("Pulsa enter per continuar...");
                 scan.nextLine();
                 break;
+            case 6:
+                try {
+                    Vista.mostrarMissatge("Introdueix el nivell màxim assolit:");
+                    String nivellMaxim = scan.nextLine();
+                    Vista.mostrarMissatge(SQLiteEscaladorsDAO.llistarNivellMaxEscaladors(conexio, nivellMaxim));
+                } catch (Exception e){
+                    Vista.mostrarMissatge("Error al llistar els escaladors: " + e.getMessage());
+                }
+                Vista.mostrarMissatge("Pulsa enter per continuar...");
+                scan.nextLine();
+                break;
             default:
                 break;
         }
@@ -279,6 +290,18 @@ public class Main {
                     SQLiteSectorsDAO.esborrar(conexio, idS);
                 } catch (Exception e) {
                     Vista.mostrarMissatge("Error al eliminar el sector: " + e.getMessage());
+                }
+                Vista.mostrarMissatge("Pulsa enter per continuar...");
+                scan.nextLine();
+                break;
+            case 6:
+                try {
+                    Vista.mostrarMissatge("Digues el num de vies mínim que ha de tenir");
+                    int numV = scan.nextInt();
+                    scan.nextLine();
+                    Vista.mostrarMissatge(SQLiteSectorsDAO.llistarAmbNumVies(conexio,numV));
+                } catch (Exception e){
+                    Vista.mostrarMissatge("Error al llistar els sectors: " + e.getMessage());
                 }
                 Vista.mostrarMissatge("Pulsa enter per continuar...");
                 scan.nextLine();
@@ -383,6 +406,17 @@ public class Main {
                     } else {
                         throw new InvalidParameterSpecException("L'estat ha de ser Apte, Construcció o Tancada");
                     }
+                } catch (Exception e){
+                    Vista.mostrarMissatge("Error al llistar les vies: " + e.getMessage());
+                }
+                Vista.mostrarMissatge("Pulsa enter per continuar...");
+                scan.nextLine();
+                break;
+            case 9:
+                try{
+                    Vista.mostrarMissatge("Digues el nom de l'escola per la qual vols filtrar");
+                    String escola = scan.nextLine();
+                    Vista.mostrarMissatge(SQLiteViesDAO.llistarPerEscolaLlargada(conexio,escola));
                 } catch (Exception e){
                     Vista.mostrarMissatge("Error al llistar les vies: " + e.getMessage());
                 }

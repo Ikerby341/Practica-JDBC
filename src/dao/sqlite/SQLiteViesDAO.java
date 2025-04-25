@@ -1,12 +1,8 @@
 package dao.sqlite;
 import dao.interfaces.DAO;
 import model.Vies;
-import model.Escoles;
-import model.Vies;
 import view.Vista;
-
 import java.sql.*;
-import java.util.Arrays;
 import java.util.InputMismatchException;
 
 public class SQLiteViesDAO implements DAO {
@@ -169,6 +165,27 @@ public class SQLiteViesDAO implements DAO {
     public static String llistarPerEstat(Connection con,String estat) {
         String fi = "";
         try (PreparedStatement stmt = con.prepareStatement("SELECT * FROM vies WHERE estat = '" + estat + "'")) {
+            ResultSet rs = stmt.executeQuery(); // Ejecutar y obtener resultados
+            ResultSetMetaData metaData = rs.getMetaData();
+            while (rs.next()) {
+                for (int i = 1; i <= metaData.getColumnCount(); i++) {
+                    String nomCol = metaData.getColumnName(i);
+                    String nomColumna = nomCol.substring(0, 1).toUpperCase() + nomCol.substring(1).replaceAll("_", " ");
+                    fi += nomColumna + ": " + rs.getString(metaData.getColumnName(i)) + (i < metaData.getColumnCount() ? "\n" : "");
+                }
+                fi += "\n";
+            }
+
+            if (fi.equals("")) fi = "No hi ha dades";
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al llistar tot", e);
+        }
+        return fi;
+    }
+
+    public static String llistarPerEscolaLlargada(Connection con,String escola) {
+        String fi = "";
+        try (PreparedStatement stmt = con.prepareStatement("SELECT * FROM vies WHERE escola = '" + escola + "' ORDER BY llargada DESC LIMIT 3")) {
             ResultSet rs = stmt.executeQuery(); // Ejecutar y obtener resultados
             ResultSetMetaData metaData = rs.getMetaData();
             while (rs.next()) {
