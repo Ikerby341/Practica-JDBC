@@ -47,7 +47,9 @@ public class SQLiteSectorsDAO implements DAO {
             ResultSetMetaData metaData = rs.getMetaData();
             while (rs.next()) {
                 for (int i = 1; i <= metaData.getColumnCount(); i++) {
-                    fi += metaData.getColumnName(i) + ": " + rs.getString(metaData.getColumnName(i)) + (i < metaData.getColumnCount() ? ", " : "");
+                    String nomCol = metaData.getColumnName(i);
+                    String nomColumna = nomCol.substring(0, 1).toUpperCase() + nomCol.substring(1).replaceAll("_", " ");
+                    fi += nomColumna + ": " + rs.getString(metaData.getColumnName(i)) + (i < metaData.getColumnCount() ? "\n" : "");
                 }
                 fi += "\n";
             }
@@ -65,7 +67,9 @@ public class SQLiteSectorsDAO implements DAO {
             ResultSetMetaData metaData = rs.getMetaData();
             while (rs.next()) {
                 for (int i = 1; i <= metaData.getColumnCount(); i++) {
-                    fi += metaData.getColumnName(i) + ": " + rs.getString(metaData.getColumnName(i)) + (i < metaData.getColumnCount() ? ", " : "");
+                    String nomCol = metaData.getColumnName(i);
+                    String nomColumna = nomCol.substring(0, 1).toUpperCase() + nomCol.substring(1).replaceAll("_", " ");
+                    fi += nomColumna + ": " + rs.getString(metaData.getColumnName(i)) + (i < metaData.getColumnCount() ? "\n" : "");
                 }
                 fi += "\n";
             }

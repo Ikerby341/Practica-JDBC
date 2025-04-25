@@ -63,7 +63,7 @@ public class Main {
                 break;
             case 3:
                 Vista.mostrarSubmenuVies();
-                scanOpcio(5);
+                scanOpcio(6);
                 switchVies();
                 break;
             case 4:
@@ -338,6 +338,14 @@ public class Main {
                 Vista.mostrarMissatge("Pulsa enter per continuar...");
                 scan.nextLine();
                 break;
+            case 6:
+                try{
+                    Vista.mostrarMissatge("Digues el nom de l'escola per la qual vols filtrar");
+                    String escola = scan.nextLine();
+                    Vista.mostrarMissatge(SQLiteViesDAO.llistarTotPerEscola(conexio,escola));
+                } catch (Exception e){
+                    Vista.mostrarMissatge("Error al llistar les vies: " + e.getMessage());
+                }
             default:
                 break;
         }
