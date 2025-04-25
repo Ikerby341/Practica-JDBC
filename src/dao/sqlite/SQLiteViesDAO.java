@@ -6,6 +6,8 @@ import model.Vies;
 import view.Vista;
 
 import java.sql.*;
+import java.util.Arrays;
+import java.util.InputMismatchException;
 
 public class SQLiteViesDAO implements DAO {
     public static void crear(Connection con,Object o) {
@@ -99,7 +101,74 @@ public class SQLiteViesDAO implements DAO {
 
     public static String llistarTotPerEscola(Connection con,String escola) {
         String fi = "";
-        try (PreparedStatement stmt = con.prepareStatement("SELECT * FROM vies WHERE escola = '" + escola + "' AND estat = 'disponible'")) {
+        try (PreparedStatement stmt = con.prepareStatement("SELECT * FROM vies WHERE escola = '" + escola + "' AND estat = 'Apte'")) {
+            ResultSet rs = stmt.executeQuery(); // Ejecutar y obtener resultados
+            ResultSetMetaData metaData = rs.getMetaData();
+            while (rs.next()) {
+                for (int i = 1; i <= metaData.getColumnCount(); i++) {
+                    String nomCol = metaData.getColumnName(i);
+                    String nomColumna = nomCol.substring(0, 1).toUpperCase() + nomCol.substring(1).replaceAll("_", " ");
+                    fi += nomColumna + ": " + rs.getString(metaData.getColumnName(i)) + (i < metaData.getColumnCount() ? "\n" : "");
+                }
+                fi += "\n";
+            }
+
+            if (fi.equals("")) fi = "No hi ha dades";
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al llistar tot", e);
+        }
+        return fi;
+    }
+
+    public static String llistarPerRang(Connection con, String grau1, String grau2) {
+        String resultat = "";
+
+        String diffBase = "000,4,4+,5,5+,6a,6a+,6b,6b+,6c,6c+,7a,7a+,7b,7b+,7c,7c+,8a,8a+,8b,8b+,8c,8c+,9a,9a+,9b,9b+,9c,9c+";
+        String[] difficultats = diffBase.split(",");
+
+        int grauTrobat = 0;
+        int grauTrobat2 = 0;
+
+        for (int i = 0; i < difficultats.length; i++) {
+            if (difficultats[i].equals(grau1)) grauTrobat = i;
+            if (difficultats[i].equals(grau2)) grauTrobat2 = i;
+        }
+
+        if (grauTrobat > grauTrobat2 || grauTrobat == 0 || grauTrobat2 == 0){
+            throw new InputMismatchException("El grau(s) introduït(s) no es correcte");
+        }
+
+        String GrauS = "";
+
+        for (int i = grauTrobat; i <= grauTrobat2;i++){
+            if(GrauS.isEmpty()){
+                GrauS = "'" + difficultats[i] + "'";
+            } else {
+                GrauS += ", '" + difficultats[i] + "'";
+            }
+        }
+
+        try (PreparedStatement stmt = con.prepareStatement("SELECT * FROM vies WHERE grau_dificultat IN (" + GrauS + ")")) {
+            ResultSet rs = stmt.executeQuery(); // Ejecutar y obtener resultados
+            ResultSetMetaData metaData = rs.getMetaData();
+
+            while (rs.next()) {
+                for (int i = 1; i <= metaData.getColumnCount(); i++) {
+                    String nomCol = metaData.getColumnName(i);
+                    String nomColumna = nomCol.substring(0, 1).toUpperCase() + nomCol.substring(1).replaceAll("_", " ");
+                    resultat += nomColumna + ": " + rs.getString(metaData.getColumnName(i)) + (i < metaData.getColumnCount() ? "\n" : "");
+                }
+                resultat += "\n";
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al llistar per Grau de Dificultat", e);
+        }
+        return resultat;
+    }
+
+    public static String llistarPerEstat(Connection con,String estat) {
+        String fi = "";
+        try (PreparedStatement stmt = con.prepareStatement("SELECT * FROM vies WHERE estat = '" + estat + "'")) {
             ResultSet rs = stmt.executeQuery(); // Ejecutar y obtener resultados
             ResultSetMetaData metaData = rs.getMetaData();
             while (rs.next()) {

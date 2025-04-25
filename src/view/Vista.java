@@ -44,6 +44,7 @@ public class Vista {
         Vista.mostrarMissatge("3) Cercar escola");
         Vista.mostrarMissatge("4) Mostrar totes les escoles");
         Vista.mostrarMissatge("5) Eliminar escoles");
+        Vista.mostrarMissatge("6) Consultar escoles amb restriccions actives actualment");
         Vista.mostrarMissatge("0) Tornar");
         Vista.mostrarMissatge("Selecciona una opció (0-5): ");
     }
@@ -66,8 +67,9 @@ public class Vista {
         Vista.mostrarMissatge("3) Cercar via");
         Vista.mostrarMissatge("4) Mostrar totes les vies");
         Vista.mostrarMissatge("5) Eliminar via");
-        Vista.mostrarMissatge("6) Cercar vies disponibles en una escola");
+        Vista.mostrarMissatge("6) Mostrar vies disponibles en una escola");
         Vista.mostrarMissatge("7) Cercar vies per dificultat en un rang (via, grau, sector, escola)");
+        Vista.mostrarMissatge("8) Cercar vies segons estat (Apte, Construcció, Tancada)");
         Vista.mostrarMissatge("0) Tornar");
         Vista.mostrarMissatge("Selecciona una opció (0-5): ");
     }
