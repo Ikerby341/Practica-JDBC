@@ -92,4 +92,25 @@ public class SQLiteEscolesDAO implements DAO {
         }
     }
 
+    public static String llistarAmbRest(Connection con) {
+        String fi = "";
+        try (PreparedStatement stmt = con.prepareStatement("SELECT * FROM escoles WHERE restriccions IS NOT NULL")) {
+            ResultSet rs = stmt.executeQuery(); // Ejecutar y obtener resultados
+            ResultSetMetaData metaData = rs.getMetaData();
+            while (rs.next()) {
+                for (int i = 1; i <= metaData.getColumnCount(); i++) {
+                    String nomCol = metaData.getColumnName(i);
+                    String nomColumna = nomCol.substring(0, 1).toUpperCase() + nomCol.substring(1).replaceAll("_", " ");
+                    fi += nomColumna + ": " + rs.getString(metaData.getColumnName(i)) + (i < metaData.getColumnCount() ? "\n" : "");
+                }
+                fi += "\n";
+            }
+
+            if (fi.equals("")) fi = "No hi ha dades";
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al llistar tot", e);
+        }
+        return fi;
+    }
+
 }

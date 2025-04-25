@@ -3,6 +3,8 @@ import dao.DBConnection;
 import dao.sqlite.*;
 import view.Vista;
 import model.*;
+
+import java.security.spec.InvalidParameterSpecException;
 import java.sql.Connection;
 import java.util.Scanner;
 
@@ -53,7 +55,7 @@ public class Main {
         switch (opcio) {
             case 1:
                 Vista.mostrarSubmenuEscoles();
-                scanOpcio(5);
+                scanOpcio(6);
                 switchEscola();
                 break;
             case 2:
@@ -63,7 +65,7 @@ public class Main {
                 break;
             case 3:
                 Vista.mostrarSubmenuVies();
-                scanOpcio(6);
+                scanOpcio(8);
                 switchVies();
                 break;
             case 4:
@@ -136,6 +138,15 @@ public class Main {
                     SQLiteEscolesDAO.esborrar(conexio, nomE);
                 } catch (Exception e) {
                     Vista.mostrarMissatge("Error al eliminar l'escola: " + e.getMessage());
+                }
+                Vista.mostrarMissatge("Pulsa enter per continuar...");
+                scan.nextLine();
+                break;
+            case 6:
+                try{
+                    Vista.mostrarMissatge(SQLiteEscolesDAO.llistarAmbRest(conexio));
+                } catch (Exception e){
+                    Vista.mostrarMissatge("Error al llistar les vies: " + e.getMessage());
                 }
                 Vista.mostrarMissatge("Pulsa enter per continuar...");
                 scan.nextLine();
@@ -346,6 +357,38 @@ public class Main {
                 } catch (Exception e){
                     Vista.mostrarMissatge("Error al llistar les vies: " + e.getMessage());
                 }
+                Vista.mostrarMissatge("Pulsa enter per continuar...");
+                scan.nextLine();
+                break;
+            case 7:
+                try{
+                    Vista.mostrarMissatge("Cercar vies per dificultat en un rang (via, grau, sector, escola)");
+                    Vista.mostrarMissatge("Introdueix el rang inicial:");
+                    String difficultat1 = scan.nextLine();
+                    Vista.mostrarMissatge("Introdueix el rang final:");
+                    String difficultat2 = scan.nextLine();
+                    Vista.mostrarMissatge(SQLiteViesDAO.llistarPerRang(conexio,difficultat1,difficultat2));
+                } catch (Exception e){
+                    Vista.mostrarMissatge("Error al llistar les vies per rang: " + e.getMessage());
+                }
+                Vista.mostrarMissatge("Pulsa enter per continuar...");
+                scan.nextLine();
+                break;
+            case 8:
+                try{
+                    Vista.mostrarMissatge("Digues l'estat pel qual vols filtrar (Apte, Construcció, Tancada)");
+                    String estat = scan.nextLine();
+                    if (estat.equals("Apte") || estat.equals("Contstruccio") || estat.equals("Tancada")){
+                        Vista.mostrarMissatge(SQLiteViesDAO.llistarPerEstat(conexio,estat));
+                    } else {
+                        throw new InvalidParameterSpecException("L'estat ha de ser Apte, Construcció o Tancada");
+                    }
+                } catch (Exception e){
+                    Vista.mostrarMissatge("Error al llistar les vies: " + e.getMessage());
+                }
+                Vista.mostrarMissatge("Pulsa enter per continuar...");
+                scan.nextLine();
+                break;
             default:
                 break;
         }
