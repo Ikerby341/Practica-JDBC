@@ -12,7 +12,7 @@ import java.util.InputMismatchException;
 public class SQLiteViesDAO implements DAO {
     public static void crear(Connection con,Object o) {
         if (o instanceof Vies) {
-            String sql = "INSERT INTO vies (tipus_via,nom,llargada,grau_dificultat,orientacio,estat,escola,sector_id,ancoratges,tipus_roca,creador) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO vies (tipus_via,nom,llargada,grau_dificultat,orientacio,estat,escola,sector,ancoratges,tipus_roca,creador) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement pstmt = con.prepareStatement(sql)) {
                 pstmt.setString(1, ((Vies) o).getTipusVia());
                 pstmt.setString(2, ((Vies) o).getNom());
@@ -21,7 +21,7 @@ public class SQLiteViesDAO implements DAO {
                 pstmt.setString(5, ((Vies) o).getOrientacio());
                 pstmt.setString(6, ((Vies) o).getEstat());
                 pstmt.setString(7, ((Vies) o).getEscola());
-                pstmt.setInt(8, ((Vies) o).getSectorID());
+                pstmt.setString(8, ((Vies) o).getSector());
                 pstmt.setString(9, ((Vies) o).getAncoratges());
                 pstmt.setString(10, ((Vies) o).getTipusRoca());
                 pstmt.setString(11, ((Vies) o).getCreador());

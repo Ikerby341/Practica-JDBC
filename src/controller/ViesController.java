@@ -23,9 +23,8 @@ public class ViesController {
         String estat = scan.nextLine();
         Vista.mostrarMissatge("Escriu el nom de l'escola:");
         String escola = scan.nextLine();
-        Vista.mostrarMissatge("Escriu l'id del sector:");
-        int sectorID = scan.nextInt();
-        scan.nextLine();
+        Vista.mostrarMissatge("Escriu el nom del sector:");
+        String sector = scan.nextLine();
         Vista.mostrarMissatge("Escriu el tipus d'ancoratges (friends, tascons, bagues, pitons, tricams, bigbros, spits, parabolts o quimics):");
         String ancoratges = scan.nextLine();
         Vista.mostrarMissatge("Escriu el tipus de roca (conglomerat, granit, calcaris, arenisca o altres):");
@@ -33,6 +32,6 @@ public class ViesController {
         Vista.mostrarMissatge("Escriu el nom del creador:");
         String creador = scan.nextLine();
 
-        return new Vies(tipus, nom, llargada, dificultat, orientacio, estat, escola, sectorID, ancoratges, tipusRoca, creador);
+        return new Vies(tipus, nom, llargada, dificultat, orientacio, estat, escola, sector, ancoratges, tipusRoca, creador);
     }
 }
