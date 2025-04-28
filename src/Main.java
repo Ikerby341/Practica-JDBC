@@ -65,7 +65,7 @@ public class Main {
                 break;
             case 3:
                 Vista.mostrarSubmenuVies();
-                scanOpcio(9);
+                scanOpcio(10);
                 switchVies();
                 break;
             case 4:
@@ -219,9 +219,9 @@ public class Main {
                 break;
             case 5:
                 try {
-                    Vista.mostrarMissatge("Digues la id del escalador que vols eliminar");
-                    String idE = scan.nextLine();
-                    SQLiteEscaladorsDAO.esborrar(conexio, idE);
+                    Vista.mostrarMissatge("Digues el nom del escalador que vols eliminar");
+                    String nom = scan.nextLine();
+                    SQLiteEscaladorsDAO.esborrar(conexio, nom);
                 } catch (Exception e) {
                     Vista.mostrarMissatge("Error al eliminar l'escalador: " + e.getMessage());
                 }
@@ -296,9 +296,9 @@ public class Main {
                 break;
             case 5:
                 try {
-                    Vista.mostrarMissatge("Digues la id del sector que vols eliminar");
-                    String idS = scan.nextLine();
-                    SQLiteSectorsDAO.esborrar(conexio, idS);
+                    Vista.mostrarMissatge("Digues el nom del sector que vols eliminar");
+                    String nom = scan.nextLine();
+                    SQLiteSectorsDAO.esborrar(conexio, nom);
                 } catch (Exception e) {
                     Vista.mostrarMissatge("Error al eliminar el sector: " + e.getMessage());
                 }
@@ -374,9 +374,9 @@ public class Main {
                 break;
             case 5:
                 try {
-                    Vista.mostrarMissatge("Digues la id de la via que vols eliminar");
-                    String idS = scan.nextLine();
-                    SQLiteViesDAO.esborrar(conexio, idS);
+                    Vista.mostrarMissatge("Digues el nom de la via que vols eliminar");
+                    String nom = scan.nextLine();
+                    SQLiteViesDAO.esborrar(conexio, nom);
                 } catch (Exception e) {
                     Vista.mostrarMissatge("Error al eliminar la via: " + e.getMessage());
                 }
@@ -428,6 +428,18 @@ public class Main {
                     Vista.mostrarMissatge("Digues el nom de l'escola per la qual vols filtrar");
                     String escola = scan.nextLine();
                     Vista.mostrarMissatge(SQLiteViesDAO.llistarPerEscolaLlargada(conexio,escola));
+                } catch (Exception e){
+                    Vista.mostrarMissatge("Error al llistar les vies: " + e.getMessage());
+                }
+                Vista.mostrarMissatge("Pulsa enter per continuar...");
+                scan.nextLine();
+                break;
+            case 10:
+                try{
+                    Vista.mostrarMissatge("Digues el numero de dies");
+                    int dies = scan.nextInt();
+                    scan.nextLine();
+                    Vista.mostrarMissatge(SQLiteViesDAO.llistarEstatMod(conexio,dies));
                 } catch (Exception e){
                     Vista.mostrarMissatge("Error al llistar les vies: " + e.getMessage());
                 }

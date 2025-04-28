@@ -29,18 +29,32 @@ public class SQLiteEscolesDAO implements DAO {
     public static String llistarID(Connection con, String nom) {
         String fi = "";
         try (PreparedStatement stmt = con.prepareStatement("SELECT * FROM escoles WHERE nom = '" + nom + "'")) {
-            ResultSet rs = stmt.executeQuery(); // Ejecutar y obtener resultados
+            ResultSet rs = stmt.executeQuery();
             ResultSetMetaData metaData = rs.getMetaData();
             for (int i = 1; i <= metaData.getColumnCount(); i++) {
                 String nomCol = metaData.getColumnName(i);
                 String nomColumna = nomCol.substring(0, 1).toUpperCase() + nomCol.substring(1).replaceAll("_", " ");
-                fi += String.format("%-25s", nomColumna);
+                if (i == 3){
+                    fi += String.format("%-65s", nomColumna);
+                } else if (i == 4 || i == 5) {
+                    fi += String.format("%-15s", nomColumna);
+                } else {
+                    fi += String.format("%-25s", nomColumna);
+                }
+
             }
             fi += "\n";
 
             while (rs.next()) {
                 for (int i = 1; i <= metaData.getColumnCount(); i++) {
-                    fi += String.format("%-25s", rs.getString(i));
+                    if (i == 3){
+                        fi += String.format("%-65s", rs.getString(i));
+                    } else if (i == 4 || i == 5) {
+                        fi += String.format("%-15s", rs.getString(i));
+                    } else {
+                        fi += String.format("%-25s", rs.getString(i));
+                    }
+
                 }
                 fi += "\n";
             }
@@ -53,18 +67,32 @@ public class SQLiteEscolesDAO implements DAO {
     public static String llistarTot(Connection con) {
         String fi = "";
         try (PreparedStatement stmt = con.prepareStatement("SELECT * FROM escoles")) {
-            ResultSet rs = stmt.executeQuery(); // Ejecutar y obtener resultados
+            ResultSet rs = stmt.executeQuery();
             ResultSetMetaData metaData = rs.getMetaData();
             for (int i = 1; i <= metaData.getColumnCount(); i++) {
                 String nomCol = metaData.getColumnName(i);
                 String nomColumna = nomCol.substring(0, 1).toUpperCase() + nomCol.substring(1).replaceAll("_", " ");
-                fi += String.format("%-25s", nomColumna);
+                if (i == 3){
+                    fi += String.format("%-65s", nomColumna);
+                } else if (i == 4 || i == 5) {
+                    fi += String.format("%-15s", nomColumna);
+                } else {
+                    fi += String.format("%-25s", nomColumna);
+                }
+
             }
             fi += "\n";
 
             while (rs.next()) {
                 for (int i = 1; i <= metaData.getColumnCount(); i++) {
-                    fi += String.format("%-25s", rs.getString(i));
+                    if (i == 3){
+                        fi += String.format("%-65s", rs.getString(i));
+                    } else if (i == 4 || i == 5) {
+                        fi += String.format("%-15s", rs.getString(i));
+                    } else {
+                        fi += String.format("%-25s", rs.getString(i));
+                    }
+
                 }
                 fi += "\n";
             }
@@ -91,7 +119,7 @@ public class SQLiteEscolesDAO implements DAO {
         try (Statement stmt = con.createStatement()) {
             int rowsAffected = stmt.executeUpdate("DELETE FROM escoles WHERE nom = '" + Nom + "'");
             if (rowsAffected > 0) {
-                System.out.println("La tabla ha sigut eliminada amb éxit.");
+                System.out.println("La escola ha sigut eliminada amb éxit.");
             } else {
                 System.out.println("No s'ha trobat cap fila amb el nom especificat.");
             }
@@ -108,13 +136,27 @@ public class SQLiteEscolesDAO implements DAO {
             for (int i = 1; i <= metaData.getColumnCount(); i++) {
                 String nomCol = metaData.getColumnName(i);
                 String nomColumna = nomCol.substring(0, 1).toUpperCase() + nomCol.substring(1).replaceAll("_", " ");
-                fi += String.format("%-25s", nomColumna);
+                if (i == 3){
+                    fi += String.format("%-65s", nomColumna);
+                } else if (i == 4 || i == 5) {
+                    fi += String.format("%-15s", nomColumna);
+                } else {
+                    fi += String.format("%-25s", nomColumna);
+                }
+
             }
             fi += "\n";
 
             while (rs.next()) {
                 for (int i = 1; i <= metaData.getColumnCount(); i++) {
-                    fi += String.format("%-25s", rs.getString(i));
+                    if (i == 3){
+                        fi += String.format("%-65s", rs.getString(i));
+                    } else if (i == 4 || i == 5) {
+                        fi += String.format("%-15s", rs.getString(i));
+                    } else {
+                        fi += String.format("%-25s", rs.getString(i));
+                    }
+
                 }
                 fi += "\n";
             }

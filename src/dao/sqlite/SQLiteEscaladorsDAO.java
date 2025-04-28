@@ -1,6 +1,5 @@
 package dao.sqlite;
 import model.*;
-import dao.DBConnection;
 import dao.interfaces.DAO;
 import view.Vista;
 
@@ -34,7 +33,7 @@ public class SQLiteEscaladorsDAO implements DAO {
     public static void actualitzar(Connection con,String id, String quequiero, String comoquiero) {
         try (Statement stmt = con.createStatement()) {
             String sql = "UPDATE escaladors SET " + quequiero + " = '" + comoquiero + "' WHERE escalador_id = " + id;
-            stmt.executeUpdate(sql); // Usa executeUpdate para consultas de actualización
+            stmt.executeUpdate(sql);
         } catch (SQLException e) {
             throw new RuntimeException("Error al actualitzar la base de dades", e);
         }
@@ -44,18 +43,34 @@ public class SQLiteEscaladorsDAO implements DAO {
     public static String llistarID(Connection con,String nom) {
         String fi = "";
         try (PreparedStatement stmt = con.prepareStatement("SELECT * FROM escaladors WHERE nom = '" + nom + "'")) {
-            ResultSet rs = stmt.executeQuery(); // Ejecutar y obtener resultados
+            ResultSet rs = stmt.executeQuery();
             ResultSetMetaData metaData = rs.getMetaData();
             for (int i = 1; i <= metaData.getColumnCount(); i++) {
                 String nomCol = metaData.getColumnName(i);
                 String nomColumna = nomCol.substring(0, 1).toUpperCase() + nomCol.substring(1).replaceAll("_", " ");
-                fi += String.format("%-25s", nomColumna);
+                if (i == 4 || i == 5 || i == 6){
+                    fi += String.format("%-10s", nomColumna);
+                } else if (i == 1) {
+                    fi += String.format("%-15s", nomColumna);
+                } else if (i == 8) {
+                    fi += String.format("%-80s", nomColumna);
+                } else {
+                    fi += String.format("%-25s", nomColumna);
+                }
             }
             fi += "\n";
 
             while (rs.next()) {
                 for (int i = 1; i <= metaData.getColumnCount(); i++) {
-                    fi += String.format("%-25s", rs.getString(i));
+                    if (i == 4 || i == 5 || i == 6) {
+                        fi += String.format("%-10s", rs.getString(i));
+                    } else if (i == 1) {
+                        fi += String.format("%-15s", rs.getString(i));
+                    } else if (i == 8) {
+                        fi += String.format("%-80s", rs.getString(i));
+                    } else {
+                        fi += String.format("%-25s", rs.getString(i));
+                    }
                 }
                 fi += "\n";
             }
@@ -69,23 +84,39 @@ public class SQLiteEscaladorsDAO implements DAO {
     public static String llistarTot(Connection con) {
         String fi = "";
         try (PreparedStatement stmt = con.prepareStatement("SELECT * FROM escaladors")) {
-            ResultSet rs = stmt.executeQuery(); // Ejecutar y obtener resultados
+            ResultSet rs = stmt.executeQuery();
             ResultSetMetaData metaData = rs.getMetaData();
             for (int i = 1; i <= metaData.getColumnCount(); i++) {
                 String nomCol = metaData.getColumnName(i);
                 String nomColumna = nomCol.substring(0, 1).toUpperCase() + nomCol.substring(1).replaceAll("_", " ");
-                fi += String.format("%-25s", nomColumna);
+                if (i == 4 || i == 5 || i == 6){
+                    fi += String.format("%-10s", nomColumna);
+                } else if (i == 1) {
+                    fi += String.format("%-15s", nomColumna);
+                } else if (i == 8) {
+                    fi += String.format("%-80s", nomColumna);
+                } else {
+                    fi += String.format("%-25s", nomColumna);
+                }
             }
             fi += "\n";
 
             while (rs.next()) {
                 for (int i = 1; i <= metaData.getColumnCount(); i++) {
-                    fi += String.format("%-25s", rs.getString(i));
+                    if (i == 4 || i == 5 || i == 6) {
+                        fi += String.format("%-10s", rs.getString(i));
+                    } else if (i == 1) {
+                        fi += String.format("%-15s", rs.getString(i));
+                    } else if (i == 8) {
+                        fi += String.format("%-80s", rs.getString(i));
+                    } else {
+                        fi += String.format("%-25s", rs.getString(i));
+                    }
                 }
                 fi += "\n";
             }
 
-            if (fi.equals("")) fi = "No hi ha dades";
+            if (fi.isEmpty()) fi = "No hi ha dades";
         } catch (SQLException e) {
             throw new RuntimeException("Error al llistar tot", e);
         }
@@ -93,11 +124,11 @@ public class SQLiteEscaladorsDAO implements DAO {
     }
 
 
-    public static void esborrar(Connection con,String id) {
+    public static void esborrar(Connection con,String nom) {
         try (Statement stmt = con.createStatement()) {
-            int rowsAffected = stmt.executeUpdate("DELETE FROM escaladors WHERE escalador_id = " + id);
+            int rowsAffected = stmt.executeUpdate("DELETE FROM escaladors WHERE nom = '" + nom + "'");
             if (rowsAffected > 0) {
-                System.out.println("La tabla ha sigut eliminada amb éxit.");
+                System.out.println("L'escalador ha sigut eliminat amb éxit.");
             } else {
                 System.out.println("No s'ha trobat cap fila amb el id especificat.");
             }
@@ -115,13 +146,29 @@ public class SQLiteEscaladorsDAO implements DAO {
             for (int i = 1; i <= metaData.getColumnCount(); i++) {
                 String nomCol = metaData.getColumnName(i);
                 String nomColumna = nomCol.substring(0, 1).toUpperCase() + nomCol.substring(1).replaceAll("_", " ");
-                fi += String.format("%-25s", nomColumna);
+                if (i == 4 || i == 5 || i == 6){
+                    fi += String.format("%-10s", nomColumna);
+                } else if (i == 1) {
+                    fi += String.format("%-15s", nomColumna);
+                } else if (i == 8) {
+                    fi += String.format("%-80s", nomColumna);
+                } else {
+                    fi += String.format("%-25s", nomColumna);
+                }
             }
             fi += "\n";
 
             while (rs.next()) {
                 for (int i = 1; i <= metaData.getColumnCount(); i++) {
-                    fi += String.format("%-25s", rs.getString(i));
+                    if (i == 4 || i == 5 || i == 6) {
+                        fi += String.format("%-10s", rs.getString(i));
+                    } else if (i == 1) {
+                        fi += String.format("%-15s", rs.getString(i));
+                    } else if (i == 8) {
+                        fi += String.format("%-80s", rs.getString(i));
+                    } else {
+                        fi += String.format("%-25s", rs.getString(i));
+                    }
                 }
                 fi += "\n";
             }

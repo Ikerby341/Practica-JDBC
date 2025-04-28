@@ -74,6 +74,7 @@ public class Vista {
         Vista.mostrarMissatge("7) Cercar vies per dificultat en un rang (via, grau, sector, escola)");
         Vista.mostrarMissatge("8) Cercar vies segons estat (Apte, Construcció, Tancada)");
         Vista.mostrarMissatge("9) Mostrar les vies més llargues d’una escola determinada");
+        Vista.mostrarMissatge("10) Mostrar les vies que han passat a Apte recentment");
         Vista.mostrarMissatge("0) Tornar");
         Vista.mostrarMissatge("Selecciona una opció (0-5): ");
     }

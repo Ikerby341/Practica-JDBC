@@ -7,7 +7,6 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.InputMismatchException;
 
 public class SQLiteViesDAO implements DAO {
@@ -39,21 +38,34 @@ public class SQLiteViesDAO implements DAO {
     public static String llistarID(Connection con,String nom) {
         String fi = "";
         try (PreparedStatement stmt = con.prepareStatement("SELECT * FROM vies WHERE nom = '" + nom + "'")) {
-            ResultSet rs = stmt.executeQuery(); // Ejecutar y obtener resultados
+            ResultSet rs = stmt.executeQuery();
             ResultSetMetaData metaData = rs.getMetaData();
 
             for (int i = 1; i <= metaData.getColumnCount(); i++) {
                 String nomCol = metaData.getColumnName(i);
                 String nomColumna = nomCol.substring(0, 1).toUpperCase() + nomCol.substring(1).replaceAll("_", " ");
-                fi += String.format("%-25s", nomColumna);
+                if (i == 3){
+                    fi += String.format("%-30s", nomColumna);
+                } else {
+                    fi += String.format("%-16s", nomColumna);
+                }
             }
             fi += "\n";
 
             while (rs.next()) {
                 for (int i = 1; i <= metaData.getColumnCount(); i++) {
-                    fi += String.format("%-25s", rs.getString(i));
+                    if (i == 3){
+                        fi += String.format("%-30s", rs.getString(i));
+                    } else {
+                        fi += String.format("%-16s", rs.getString(i));
+                    }
+
                 }
                 fi += "\n";
+            }
+
+            if (fi.trim().isEmpty()) {
+                fi += "No hi ha dades\n";
             }
         } catch (SQLException e) {
             throw new RuntimeException("Error al llistar per nom", e);
@@ -62,21 +74,6 @@ public class SQLiteViesDAO implements DAO {
     }
 
     public static String llistarTot(Connection con) {
-        LocalDate avui = LocalDate.now();
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        String data = avui.format(format);
-
-        Date dataN = new Date(data);
-        Calendar cal1 = Calendar.getInstance();
-        cal1.setTime(dataN);
-        cal1.add(Calendar.DATE, 10);
-        Date dateWith5Days = cal1.getTime();
-
-        Calendar cal2 = Calendar.getInstance();
-        cal2.setTime(dataN);
-        cal2.roll(Calendar.DATE, -10);
-        Date dateWithout5Days = cal2.getTime();
-
         String fi = "";
         try (PreparedStatement stmt = con.prepareStatement("SELECT * FROM vies")) {
             ResultSet rs = stmt.executeQuery();
@@ -85,13 +82,22 @@ public class SQLiteViesDAO implements DAO {
             for (int i = 1; i <= metaData.getColumnCount(); i++) {
                 String nomCol = metaData.getColumnName(i);
                 String nomColumna = nomCol.substring(0, 1).toUpperCase() + nomCol.substring(1).replaceAll("_", " ");
-                fi += String.format("%-25s", nomColumna);
+                if (i == 3){
+                    fi += String.format("%-30s", nomColumna);
+                } else {
+                    fi += String.format("%-16s", nomColumna);
+                }
             }
             fi += "\n";
 
             while (rs.next()) {
                 for (int i = 1; i <= metaData.getColumnCount(); i++) {
-                    fi += String.format("%-25s", rs.getString(i));
+                    if (i == 3){
+                        fi += String.format("%-30s", rs.getString(i));
+                    } else {
+                        fi += String.format("%-16s", rs.getString(i));
+                    }
+
                 }
                 fi += "\n";
             }
@@ -123,12 +129,11 @@ public class SQLiteViesDAO implements DAO {
         }
     }
 
-
-    public static void esborrar(Connection con,String id) {
+    public static void esborrar(Connection con, String nom) {
         try (Statement stmt = con.createStatement()) {
-            int rowsAffected = stmt.executeUpdate("DELETE FROM vies WHERE via_id = " + id);
+            int rowsAffected = stmt.executeUpdate("DELETE FROM vies WHERE nom = '" + nom + "'");
             if (rowsAffected > 0) {
-                System.out.println("La tabla ha sigut eliminada amb éxit.");
+                System.out.println("La via ha sigut eliminada amb éxit.");
             } else {
                 System.out.println("No s'ha trobat cap fila amb el id especificat.");
             }
@@ -145,15 +150,28 @@ public class SQLiteViesDAO implements DAO {
             for (int i = 1; i <= metaData.getColumnCount(); i++) {
                 String nomCol = metaData.getColumnName(i);
                 String nomColumna = nomCol.substring(0, 1).toUpperCase() + nomCol.substring(1).replaceAll("_", " ");
-                fi += String.format("%-25s", nomColumna);
+                if (i == 3){
+                    fi += String.format("%-30s", nomColumna);
+                } else {
+                    fi += String.format("%-16s", nomColumna);
+                }
             }
             fi += "\n";
 
             while (rs.next()) {
                 for (int i = 1; i <= metaData.getColumnCount(); i++) {
-                    fi += String.format("%-25s", rs.getString(i));
+                    if (i == 3){
+                        fi += String.format("%-30s", rs.getString(i));
+                    } else {
+                        fi += String.format("%-16s", rs.getString(i));
+                    }
+
                 }
                 fi += "\n";
+            }
+
+            if (fi.trim().isEmpty()) {
+                fi += "No hi ha dades\n";
             }
 
             if (fi.equals("")) fi = "No hi ha dades";
@@ -164,7 +182,7 @@ public class SQLiteViesDAO implements DAO {
     }
 
     public static String llistarPerRang(Connection con, String grau1, String grau2) {
-        String resultat = "";
+        String fi = "";
 
         String diffBase = "000,4,4+,5,5+,6a,6a+,6b,6b+,6c,6c+,7a,7a+,7b,7b+,7c,7c+,8a,8a+,8b,8b+,8c,8c+,9a,9a+,9b,9b+,9c,9c+";
         String[] difficultats = diffBase.split(",");
@@ -192,43 +210,72 @@ public class SQLiteViesDAO implements DAO {
         }
 
         try (PreparedStatement stmt = con.prepareStatement("SELECT * FROM vies WHERE grau_dificultat IN (" + GrauS + ")")) {
-            ResultSet rs = stmt.executeQuery(); // Ejecutar y obtener resultados
+            ResultSet rs = stmt.executeQuery();
             ResultSetMetaData metaData = rs.getMetaData();
 
-            while (rs.next()) {
-                for (int i = 1; i <= metaData.getColumnCount(); i++) {
-                    String nomCol = metaData.getColumnName(i);
-                    String nomColumna = nomCol.substring(0, 1).toUpperCase() + nomCol.substring(1).replaceAll("_", " ");
-                    resultat += nomColumna + ": " + rs.getString(metaData.getColumnName(i)) + (i < metaData.getColumnCount() ? "\n" : "");
-                }
-                resultat += "\n";
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Error al llistar per Grau de Dificultat", e);
-        }
-        return resultat;
-    }
-
-    public static String llistarPerEstat(Connection con,String estat) {
-        String fi = "";
-        try (PreparedStatement stmt = con.prepareStatement("SELECT * FROM vies WHERE estat = '" + estat + "'")) {
-            ResultSet rs = stmt.executeQuery(); // Ejecutar y obtener resultados
-            ResultSetMetaData metaData = rs.getMetaData();
             for (int i = 1; i <= metaData.getColumnCount(); i++) {
                 String nomCol = metaData.getColumnName(i);
                 String nomColumna = nomCol.substring(0, 1).toUpperCase() + nomCol.substring(1).replaceAll("_", " ");
-                fi += String.format("%-25s", nomColumna);
+                if (i == 3){
+                    fi += String.format("%-30s", nomColumna);
+                } else {
+                    fi += String.format("%-16s", nomColumna);
+                }
             }
             fi += "\n";
 
             while (rs.next()) {
                 for (int i = 1; i <= metaData.getColumnCount(); i++) {
-                    fi += String.format("%-25s", rs.getString(i));
+                    if (i == 3){
+                        fi += String.format("%-30s", rs.getString(i));
+                    } else {
+                        fi += String.format("%-16s", rs.getString(i));
+                    }
+
                 }
                 fi += "\n";
             }
 
-            if (fi.isEmpty()) fi = "No hi ha dades";
+            if (fi.trim().isEmpty()) {
+                fi += "No hi ha dades\n";
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al llistar per Grau de Dificultat", e);
+        }
+        return fi;
+    }
+
+    public static String llistarPerEstat(Connection con,String estat) {
+        String fi = "";
+        try (PreparedStatement stmt = con.prepareStatement("SELECT * FROM vies WHERE estat = '" + estat + "'")) {
+            ResultSet rs = stmt.executeQuery();
+            ResultSetMetaData metaData = rs.getMetaData();
+            for (int i = 1; i <= metaData.getColumnCount(); i++) {
+                String nomCol = metaData.getColumnName(i);
+                String nomColumna = nomCol.substring(0, 1).toUpperCase() + nomCol.substring(1).replaceAll("_", " ");
+                if (i == 3){
+                    fi += String.format("%-30s", nomColumna);
+                } else {
+                    fi += String.format("%-16s", nomColumna);
+                }
+            }
+            fi += "\n";
+
+            while (rs.next()) {
+                for (int i = 1; i <= metaData.getColumnCount(); i++) {
+                    if (i == 3){
+                        fi += String.format("%-30s", rs.getString(i));
+                    } else {
+                        fi += String.format("%-16s", rs.getString(i));
+                    }
+
+                }
+                fi += "\n";
+            }
+
+            if (fi.trim().isEmpty()) {
+                fi += "No hi ha dades\n";
+            }
 
         } catch (SQLException e) {
             throw new RuntimeException("Error al llistar tot", e);
@@ -239,23 +286,34 @@ public class SQLiteViesDAO implements DAO {
     public static String llistarPerEscolaLlargada(Connection con,String escola) {
         String fi = "";
         try (PreparedStatement stmt = con.prepareStatement("SELECT * FROM vies WHERE escola = '" + escola + "' ORDER BY llargada DESC LIMIT 3")) {
-            ResultSet rs = stmt.executeQuery(); // Ejecutar y obtener resultados
+            ResultSet rs = stmt.executeQuery();
             ResultSetMetaData metaData = rs.getMetaData();
             for (int i = 1; i <= metaData.getColumnCount(); i++) {
                 String nomCol = metaData.getColumnName(i);
                 String nomColumna = nomCol.substring(0, 1).toUpperCase() + nomCol.substring(1).replaceAll("_", " ");
-                fi += String.format("%-25s", nomColumna);
+                if (i == 3){
+                    fi += String.format("%-30s", nomColumna);
+                } else {
+                    fi += String.format("%-16s", nomColumna);
+                }
             }
             fi += "\n";
 
             while (rs.next()) {
                 for (int i = 1; i <= metaData.getColumnCount(); i++) {
-                    fi += String.format("%-25s", rs.getString(i));
+                    if (i == 3){
+                        fi += String.format("%-30s", rs.getString(i));
+                    } else {
+                        fi += String.format("%-16s", rs.getString(i));
+                    }
+
                 }
                 fi += "\n";
             }
 
-            if (fi.isEmpty()) fi = "No hi ha dades";
+            if (fi.trim().isEmpty()) {
+                fi += "No hi ha dades\n";
+            }
 
         } catch (SQLException e) {
             throw new RuntimeException("Error al llistar tot", e);
@@ -263,44 +321,48 @@ public class SQLiteViesDAO implements DAO {
         return fi;
     }
 
-    public static String llistarEstatMod(Connection con) {
-        LocalDate avui = LocalDate.now();
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        String data = avui.format(format);
-
-        Date dataN = new Date(data);
-        Calendar cal1 = Calendar.getInstance();
-        cal1.setTime(dataN);
-        cal1.add(Calendar.DATE, 10);
-
-        Calendar cal2 = Calendar.getInstance();
-        cal2.setTime(dataN);
-        cal2.roll(Calendar.DATE, -10);
-
-
-
+    public static String llistarEstatMod(Connection con, int dies) {
         String fi = "";
-        try (PreparedStatement stmt = con.prepareStatement("SELECT * FROM vies WHERE data_mod_estat = '" + data + "' ORDER BY data_mod_estat DESC")) {
-            ResultSet rs = stmt.executeQuery();
-            ResultSetMetaData metaData = rs.getMetaData();
-            for (int i = 1; i <= metaData.getColumnCount(); i++) {
-                String nomCol = metaData.getColumnName(i);
-                String nomColumna = nomCol.substring(0, 1).toUpperCase() + nomCol.substring(1).replaceAll("_", " ");
-                fi += String.format("%-25s", nomColumna);
-            }
-            fi += "\n";
+        for (int y = 0; y < dies ; y++) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.DAY_OF_MONTH, -y);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+            String datafinal = dateFormat.format(calendar.getTime());
 
-            while (rs.next()) {
-                for (int i = 1; i <= metaData.getColumnCount(); i++) {
-                    fi += String.format("%-25s", rs.getString(i));
+            try (PreparedStatement stmt = con.prepareStatement("SELECT * FROM vies WHERE data_mod_estat = '" + datafinal + "' AND estat = 'Apte' ORDER BY data_mod_estat DESC")) {
+                ResultSet rs = stmt.executeQuery();
+                ResultSetMetaData metaData = rs.getMetaData();
+                if (y == 0) {
+                    for (int i = 1; i <= metaData.getColumnCount(); i++) {
+                        String nomCol = metaData.getColumnName(i);
+                        String nomColumna = nomCol.substring(0, 1).toUpperCase() + nomCol.substring(1).replaceAll("_", " ");
+                        if (i == 3) {
+                            fi += String.format("%-30s", nomColumna);
+                        } else {
+                            fi += String.format("%-16s", nomColumna);
+                        }
+                    }
+                    fi += "\n";
                 }
-                fi += "\n";
+
+                while (rs.next()) {
+                    for (int i = 1; i <= metaData.getColumnCount(); i++) {
+                        if (i == 3) {
+                            fi += String.format("%-30s", rs.getString(i));
+                        } else {
+                            fi += String.format("%-16s", rs.getString(i));
+                        }
+
+                    }
+                    fi += "\n";
+                }
+
+                if (fi.trim().isEmpty()) {
+                    fi += "No hi ha dades\n";
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException("Error al llistar les vies modificades recentment", e);
             }
-
-            if (fi.isEmpty()) fi = "No hi ha dades";
-
-        } catch (SQLException e) {
-            throw new RuntimeException("Error al llistar les vies modificades recentment", e);
         }
         return fi;
     }
