@@ -8,12 +8,12 @@ public class Vies {
     private String orientacio;
     private String estat;
     private String escola;
-    private int sectorID;
+    private String sector;
     private String ancoratges;
     private String tipusRoca;
     private String creador;
 
-    public Vies(String tipusVia, String nom, int llargada, String grauDificultat, String orientacio, String estat, String escola, int sectorID, String ancoratges, String tipusRoca, String creador) {
+    public Vies(String tipusVia, String nom, int llargada, String grauDificultat, String orientacio, String estat, String escola, String sector, String ancoratges, String tipusRoca, String creador) {
         if(tipusVia.equalsIgnoreCase("esportiva") || tipusVia.equalsIgnoreCase("classica") ||   tipusVia.equalsIgnoreCase("gel")) {
             this.tipusVia = tipusVia.toLowerCase();
         } else {
@@ -47,7 +47,7 @@ public class Vies {
         }
 
         this.escola = escola;
-        this.sectorID = sectorID;
+        this.sector = sector;
 
         if (tipusVia.equalsIgnoreCase("esportiva")) {
             if(ancoratges.equalsIgnoreCase("spits") || ancoratges.equalsIgnoreCase("parabolts") || ancoratges.equalsIgnoreCase("quimics")) {
@@ -106,8 +106,8 @@ public class Vies {
         return escola;
     }
 
-    public int getSectorID() {
-        return sectorID;
+    public String getSector() {
+        return sector;
     }
 
     public String getAncoratges() {
