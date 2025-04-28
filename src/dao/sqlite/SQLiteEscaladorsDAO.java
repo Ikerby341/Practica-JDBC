@@ -46,11 +46,16 @@ public class SQLiteEscaladorsDAO implements DAO {
         try (PreparedStatement stmt = con.prepareStatement("SELECT * FROM escaladors WHERE nom = '" + nom + "'")) {
             ResultSet rs = stmt.executeQuery(); // Ejecutar y obtener resultados
             ResultSetMetaData metaData = rs.getMetaData();
+            for (int i = 1; i <= metaData.getColumnCount(); i++) {
+                String nomCol = metaData.getColumnName(i);
+                String nomColumna = nomCol.substring(0, 1).toUpperCase() + nomCol.substring(1).replaceAll("_", " ");
+                fi += String.format("%-25s", nomColumna);
+            }
+            fi += "\n";
+
             while (rs.next()) {
                 for (int i = 1; i <= metaData.getColumnCount(); i++) {
-                    String nomCol = metaData.getColumnName(i);
-                    String nomColumna = nomCol.substring(0, 1).toUpperCase() + nomCol.substring(1).replaceAll("_", " ");
-                    fi += nomColumna + ": " + rs.getString(metaData.getColumnName(i)) + (i < metaData.getColumnCount() ? "\n" : "");
+                    fi += String.format("%-25s", rs.getString(i));
                 }
                 fi += "\n";
             }
@@ -66,11 +71,16 @@ public class SQLiteEscaladorsDAO implements DAO {
         try (PreparedStatement stmt = con.prepareStatement("SELECT * FROM escaladors")) {
             ResultSet rs = stmt.executeQuery(); // Ejecutar y obtener resultados
             ResultSetMetaData metaData = rs.getMetaData();
+            for (int i = 1; i <= metaData.getColumnCount(); i++) {
+                String nomCol = metaData.getColumnName(i);
+                String nomColumna = nomCol.substring(0, 1).toUpperCase() + nomCol.substring(1).replaceAll("_", " ");
+                fi += String.format("%-25s", nomColumna);
+            }
+            fi += "\n";
+
             while (rs.next()) {
                 for (int i = 1; i <= metaData.getColumnCount(); i++) {
-                    String nomCol = metaData.getColumnName(i);
-                    String nomColumna = nomCol.substring(0, 1).toUpperCase() + nomCol.substring(1).replaceAll("_", " ");
-                    fi += nomColumna + ": " + rs.getString(metaData.getColumnName(i)) + (i < metaData.getColumnCount() ? "\n" : "");
+                    fi += String.format("%-25s", rs.getString(i));
                 }
                 fi += "\n";
             }
@@ -97,23 +107,29 @@ public class SQLiteEscaladorsDAO implements DAO {
     }
 
     public static String llistarNivellMaxEscaladors(Connection con, String nivell) {
-        String resultat = "";
+        String fi = "";
         try (PreparedStatement stmt = con.prepareStatement("SELECT * FROM escaladors WHERE nivell = '" + nivell + "'")) {
             ResultSet rs = stmt.executeQuery(); // Ejecutar y obtener resultados
             ResultSetMetaData metaData = rs.getMetaData();
+
+            for (int i = 1; i <= metaData.getColumnCount(); i++) {
+                String nomCol = metaData.getColumnName(i);
+                String nomColumna = nomCol.substring(0, 1).toUpperCase() + nomCol.substring(1).replaceAll("_", " ");
+                fi += String.format("%-25s", nomColumna);
+            }
+            fi += "\n";
+
             while (rs.next()) {
                 for (int i = 1; i <= metaData.getColumnCount(); i++) {
-                    String nomCol = metaData.getColumnName(i);
-                    String nomColumna = nomCol.substring(0, 1).toUpperCase() + nomCol.substring(1).replaceAll("_", " ");
-                    resultat += nomColumna + ": " + rs.getString(metaData.getColumnName(i)) + (i < metaData.getColumnCount() ? "\n" : "");
+                    fi += String.format("%-25s", rs.getString(i));
                 }
-                resultat += "\n";
+                fi += "\n";
             }
 
-            if (resultat.isEmpty()) resultat = "No hi ha dades";
+            if (fi.isEmpty()) fi = "No hi ha dades";
         } catch (SQLException e) {
             throw new RuntimeException("Error al mostrar escaladors amb el mateix nivell indicat", e);
         }
-        return resultat;
+        return fi;
     }
 }

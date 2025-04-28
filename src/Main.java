@@ -55,7 +55,7 @@ public class Main {
         switch (opcio) {
             case 1:
                 Vista.mostrarSubmenuEscoles();
-                scanOpcio(6);
+                scanOpcio(7);
                 switchEscola();
                 break;
             case 2:
@@ -146,7 +146,18 @@ public class Main {
                 try{
                     Vista.mostrarMissatge(SQLiteEscolesDAO.llistarAmbRest(conexio));
                 } catch (Exception e){
-                    Vista.mostrarMissatge("Error al llistar les vies: " + e.getMessage());
+                    Vista.mostrarMissatge("Error al llistar les escoles: " + e.getMessage());
+                }
+                Vista.mostrarMissatge("Pulsa enter per continuar...");
+                scan.nextLine();
+                break;
+            case 7:
+                try{
+                    Vista.mostrarMissatge("Digues el nom de l'escola que vols actualitzar");
+                    String escola = scan.nextLine();
+                    SQLiteEscolesDAO.actualitzarVies(conexio, escola);
+                } catch (Exception e){
+                    Vista.mostrarMissatge("Error al actualitzar les escoles: " + e.getMessage());
                 }
                 Vista.mostrarMissatge("Pulsa enter per continuar...");
                 scan.nextLine();

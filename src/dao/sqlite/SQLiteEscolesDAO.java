@@ -31,11 +31,16 @@ public class SQLiteEscolesDAO implements DAO {
         try (PreparedStatement stmt = con.prepareStatement("SELECT * FROM escoles WHERE nom = '" + nom + "'")) {
             ResultSet rs = stmt.executeQuery(); // Ejecutar y obtener resultados
             ResultSetMetaData metaData = rs.getMetaData();
+            for (int i = 1; i <= metaData.getColumnCount(); i++) {
+                String nomCol = metaData.getColumnName(i);
+                String nomColumna = nomCol.substring(0, 1).toUpperCase() + nomCol.substring(1).replaceAll("_", " ");
+                fi += String.format("%-25s", nomColumna);
+            }
+            fi += "\n";
+
             while (rs.next()) {
                 for (int i = 1; i <= metaData.getColumnCount(); i++) {
-                    String nomCol = metaData.getColumnName(i);
-                    String nomColumna = nomCol.substring(0, 1).toUpperCase() + nomCol.substring(1).replaceAll("_", " ");
-                    fi += nomColumna + ": " + rs.getString(metaData.getColumnName(i)) + (i < metaData.getColumnCount() ? "\n" : "");
+                    fi += String.format("%-25s", rs.getString(i));
                 }
                 fi += "\n";
             }
@@ -50,11 +55,16 @@ public class SQLiteEscolesDAO implements DAO {
         try (PreparedStatement stmt = con.prepareStatement("SELECT * FROM escoles")) {
             ResultSet rs = stmt.executeQuery(); // Ejecutar y obtener resultados
             ResultSetMetaData metaData = rs.getMetaData();
+            for (int i = 1; i <= metaData.getColumnCount(); i++) {
+                String nomCol = metaData.getColumnName(i);
+                String nomColumna = nomCol.substring(0, 1).toUpperCase() + nomCol.substring(1).replaceAll("_", " ");
+                fi += String.format("%-25s", nomColumna);
+            }
+            fi += "\n";
+
             while (rs.next()) {
                 for (int i = 1; i <= metaData.getColumnCount(); i++) {
-                    String nomCol = metaData.getColumnName(i);
-                    String nomColumna = nomCol.substring(0, 1).toUpperCase() + nomCol.substring(1).replaceAll("_", " ");
-                    fi += nomColumna + ": " + rs.getString(metaData.getColumnName(i)) + (i < metaData.getColumnCount() ? "\n" : "");
+                    fi += String.format("%-25s", rs.getString(i));
                 }
                 fi += "\n";
             }
@@ -67,7 +77,6 @@ public class SQLiteEscolesDAO implements DAO {
     }
 
 
-
     public static void actualitzar(Connection con, String Nom, String quequiero, String comoquiero) {
         try (Statement stmt = con.createStatement()) {
             String sql = "UPDATE escoles SET " + quequiero + " = '" + comoquiero + "' WHERE nom = '" + Nom + "'";
@@ -76,7 +85,6 @@ public class SQLiteEscolesDAO implements DAO {
             throw new RuntimeException("Error al actualitzar la base de dades", e);
         }
     }
-
 
 
     public static void esborrar(Connection con, String Nom) {
@@ -97,11 +105,16 @@ public class SQLiteEscolesDAO implements DAO {
         try (PreparedStatement stmt = con.prepareStatement("SELECT * FROM escoles WHERE restriccions IS NOT NULL")) {
             ResultSet rs = stmt.executeQuery(); // Ejecutar y obtener resultados
             ResultSetMetaData metaData = rs.getMetaData();
+            for (int i = 1; i <= metaData.getColumnCount(); i++) {
+                String nomCol = metaData.getColumnName(i);
+                String nomColumna = nomCol.substring(0, 1).toUpperCase() + nomCol.substring(1).replaceAll("_", " ");
+                fi += String.format("%-25s", nomColumna);
+            }
+            fi += "\n";
+
             while (rs.next()) {
                 for (int i = 1; i <= metaData.getColumnCount(); i++) {
-                    String nomCol = metaData.getColumnName(i);
-                    String nomColumna = nomCol.substring(0, 1).toUpperCase() + nomCol.substring(1).replaceAll("_", " ");
-                    fi += nomColumna + ": " + rs.getString(metaData.getColumnName(i)) + (i < metaData.getColumnCount() ? "\n" : "");
+                    fi += String.format("%-25s", rs.getString(i));
                 }
                 fi += "\n";
             }
@@ -113,4 +126,14 @@ public class SQLiteEscolesDAO implements DAO {
         return fi;
     }
 
+    public static void actualitzarVies(Connection con, String escola) throws SQLException {
+        try (Statement stmt = con.createStatement()) {
+            PreparedStatement stmt2 = con.prepareStatement("SELECT COUNT(*) FROM vies WHERE escola = '" + escola + "'");
+            ResultSet rs = stmt2.executeQuery();
+            String sql = "UPDATE escoles SET num_vies = " + rs.getString(1) + " WHERE nom = '" + escola + "'";
+            stmt.executeUpdate(sql);
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al actualitzar la base de dades", e);
+        }
+    }
 }

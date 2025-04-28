@@ -46,6 +46,7 @@ public class Vista {
         Vista.mostrarMissatge("4) Mostrar totes les escoles");
         Vista.mostrarMissatge("5) Eliminar escoles");
         Vista.mostrarMissatge("6) Consultar escoles amb restriccions actives actualment");
+        Vista.mostrarMissatge("7) Actualitzar número de vies automàticament");
         Vista.mostrarMissatge("0) Tornar");
         Vista.mostrarMissatge("Selecciona una opció (0-5): ");
     }

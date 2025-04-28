@@ -43,11 +43,16 @@ public class SQLiteSectorsDAO implements DAO {
         try (PreparedStatement stmt = con.prepareStatement("SELECT * FROM sectors WHERE nom = '" + nom + "'")) {
             ResultSet rs = stmt.executeQuery(); // Ejecutar y obtener resultados
             ResultSetMetaData metaData = rs.getMetaData();
+            for (int i = 1; i <= metaData.getColumnCount(); i++) {
+                String nomCol = metaData.getColumnName(i);
+                String nomColumna = nomCol.substring(0, 1).toUpperCase() + nomCol.substring(1).replaceAll("_", " ");
+                fi += String.format("%-25s", nomColumna);
+            }
+            fi += "\n";
+
             while (rs.next()) {
                 for (int i = 1; i <= metaData.getColumnCount(); i++) {
-                    String nomCol = metaData.getColumnName(i);
-                    String nomColumna = nomCol.substring(0, 1).toUpperCase() + nomCol.substring(1).replaceAll("_", " ");
-                    fi += nomColumna + ": " + rs.getString(metaData.getColumnName(i)) + (i < metaData.getColumnCount() ? "\n" : "");
+                    fi += String.format("%-25s", rs.getString(i));
                 }
                 fi += "\n";
             }
@@ -63,11 +68,16 @@ public class SQLiteSectorsDAO implements DAO {
         try (PreparedStatement stmt = con.prepareStatement("SELECT * FROM sectors")) {
             ResultSet rs = stmt.executeQuery(); // Ejecutar y obtener resultados
             ResultSetMetaData metaData = rs.getMetaData();
+            for (int i = 1; i <= metaData.getColumnCount(); i++) {
+                String nomCol = metaData.getColumnName(i);
+                String nomColumna = nomCol.substring(0, 1).toUpperCase() + nomCol.substring(1).replaceAll("_", " ");
+                fi += String.format("%-25s", nomColumna);
+            }
+            fi += "\n";
+
             while (rs.next()) {
                 for (int i = 1; i <= metaData.getColumnCount(); i++) {
-                    String nomCol = metaData.getColumnName(i);
-                    String nomColumna = nomCol.substring(0, 1).toUpperCase() + nomCol.substring(1).replaceAll("_", " ");
-                    fi += nomColumna + ": " + rs.getString(metaData.getColumnName(i)) + (i < metaData.getColumnCount() ? "\n" : "");
+                    fi += String.format("%-25s", rs.getString(i));
                 }
                 fi += "\n";
             }
@@ -98,11 +108,16 @@ public class SQLiteSectorsDAO implements DAO {
         try (PreparedStatement stmt = con.prepareStatement("SELECT * FROM sectors s WHERE (SELECT COUNT(*) FROM vies v WHERE v.sector_id = s.sector_id AND v.estat = 'Apte') >=" + numV)) {
             ResultSet rs = stmt.executeQuery(); // Ejecutar y obtener resultados
             ResultSetMetaData metaData = rs.getMetaData();
+            for (int i = 1; i <= metaData.getColumnCount(); i++) {
+                String nomCol = metaData.getColumnName(i);
+                String nomColumna = nomCol.substring(0, 1).toUpperCase() + nomCol.substring(1).replaceAll("_", " ");
+                fi += String.format("%-25s", nomColumna);
+            }
+            fi += "\n";
+
             while (rs.next()) {
                 for (int i = 1; i <= metaData.getColumnCount(); i++) {
-                    String nomCol = metaData.getColumnName(i);
-                    String nomColumna = nomCol.substring(0, 1).toUpperCase() + nomCol.substring(1).replaceAll("_", " ");
-                    fi += nomColumna + ": " + rs.getString(metaData.getColumnName(i)) + (i < metaData.getColumnCount() ? "\n" : "");
+                    fi += String.format("%-25s", rs.getString(i));
                 }
                 fi += "\n";
             }
