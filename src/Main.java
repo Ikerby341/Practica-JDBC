@@ -330,7 +330,9 @@ public class Main {
             case 1:
                 try{
                     Vies via = ViesController.crearVia();
-                    SQLiteViesDAO.crear(conexio,via);
+                    if (SQLiteViesDAO.crear(conexio,via) == 1){
+                        tram(via.getNom());
+                    };
                 }catch (Exception e){
                     Vista.mostrarMissatge("Error al crear la via: " + e.getMessage());
                 }
@@ -449,5 +451,27 @@ public class Main {
             default:
                 break;
         }
+    }
+
+    private static void tram(String nom)  {
+        Connection conexio = DBConnection.getConnexio();
+        Vista.mostrarMissatge("Digues el número de trams (Minim 2)");
+        int numT = scan.nextInt();
+        scan.nextLine();
+
+        while(numT < 2){
+            Vista.mostrarMissatge("El número no pot ser menor a 2!\nDigues el número de trams");
+            numT = scan.nextInt();
+            scan.nextLine();
+        }
+        try {
+            for (int i = 0; i < numT; i++) {
+                Trams tram = TramsController.crearTram(nom);
+                SQLiteTramsDAO.crear(conexio,tram);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
     }
 }

@@ -10,7 +10,7 @@ import java.util.Calendar;
 import java.util.InputMismatchException;
 
 public class SQLiteViesDAO implements DAO {
-    public static void crear(Connection con,Object o) {
+    public static int crear(Connection con,Object o) {
         if (o instanceof Vies) {
             String sql = "INSERT INTO vies (tipus_via,nom,llargada,grau_dificultat,orientacio,estat,escola,sector,ancoratges,tipus_roca,creador) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement pstmt = con.prepareStatement(sql)) {
@@ -27,12 +27,14 @@ public class SQLiteViesDAO implements DAO {
                 pstmt.setString(11, ((Vies) o).getCreador());
                 pstmt.executeUpdate();
                 Vista.mostrarMissatge("Registre insertat correctament.");
+                if (!((Vies) o).getTipusVia().equalsIgnoreCase("esportiva")) return 1;
             } catch (SQLException e) {
                 System.err.println("Error al insertar en la base de dades: " + e.getMessage());
             }
         } else {
             throw new IllegalArgumentException("L'objecte proporcionat no es una instancia d'Vies.");
         }
+        return 0;
     }
 
     public static String llistarID(Connection con,String nom) {
@@ -131,14 +133,21 @@ public class SQLiteViesDAO implements DAO {
 
     public static void esborrar(Connection con, String nom) {
         try (Statement stmt = con.createStatement()) {
-            int rowsAffected = stmt.executeUpdate("DELETE FROM vies WHERE nom = '" + nom + "'");
+            int rowsAffected = stmt.executeUpdate("DELETE FROM trams WHERE via = '" + nom + "'");
             if (rowsAffected > 0) {
-                System.out.println("La via ha sigut eliminada amb éxit.");
+                System.out.println("Els trams de la via han sigut eliminats amb éxit.");
+                rowsAffected = stmt.executeUpdate("DELETE FROM vies WHERE nom = '" + nom + "'");
+                if (rowsAffected > 0) {
+                    System.out.println("La via ha sigut eliminada amb éxit.");
+                } else {
+                    System.out.println("No s'ha trobat cap fila amb el id especificat.");
+                }
             } else {
                 System.out.println("No s'ha trobat cap fila amb el id especificat.");
             }
+
         } catch (SQLException e) {
-            throw new RuntimeException("Error al eliminar la taula", e);
+            throw new RuntimeException("Error al eliminar la via", e);
         }
     }
 
