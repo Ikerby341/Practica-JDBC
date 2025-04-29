@@ -134,17 +134,13 @@ public class SQLiteViesDAO implements DAO {
     public static void esborrar(Connection con, String nom) {
         try (Statement stmt = con.createStatement()) {
             int rowsAffected = stmt.executeUpdate("DELETE FROM trams WHERE via = '" + nom + "'");
+            rowsAffected = stmt.executeUpdate("DELETE FROM vies WHERE nom = '" + nom + "'");
             if (rowsAffected > 0) {
-                System.out.println("Els trams de la via han sigut eliminats amb éxit.");
-                rowsAffected = stmt.executeUpdate("DELETE FROM vies WHERE nom = '" + nom + "'");
-                if (rowsAffected > 0) {
-                    System.out.println("La via ha sigut eliminada amb éxit.");
-                } else {
-                    System.out.println("No s'ha trobat cap fila amb el id especificat.");
-                }
+                System.out.println("La via ha sigut eliminada amb éxit.");
             } else {
                 System.out.println("No s'ha trobat cap fila amb el id especificat.");
             }
+
 
         } catch (SQLException e) {
             throw new RuntimeException("Error al eliminar la via", e);

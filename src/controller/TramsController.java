@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class TramsController {
     public static Scanner scan = new Scanner(System.in);
 
-    public static Trams crearTram(String via) {
+    public static Trams crearTram(String via, String Grau_dificultatVia) {
         Vista.mostrarTitol("CREACIÓ TRAM");
 
         Vista.mostrarMissatge("Escriu la llargada del tram:");
@@ -16,6 +16,6 @@ public class TramsController {
         Vista.mostrarMissatge("Escriu el grau de dificultat:");
         String grau_dificultat = scan.nextLine();
 
-        return new Trams(via , llargada, grau_dificultat);
+        return new Trams(via , llargada, grau_dificultat, Grau_dificultatVia);
     }
 }
